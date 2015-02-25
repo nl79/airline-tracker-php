@@ -1,0 +1,29 @@
+
+#div-twitter-toolbar {
+    border: 1px solid gray; 
+    width: 80%;
+    margin: 0px auto; 
+}
+
+#form-tweet {
+    width: 80%;
+    margin: 0px auto; 
+}
+.align-vertical * {
+    vertical-align: middle; 
+}
+#textarea-status {
+    width: 600px;
+    height: 80px; 
+}
+
+#ul-links {
+    padding: 10px; 
+}
+
+#ul-links li {
+    display: block;
+    list-style-type: none;
+    float: left;
+    margin-left: 15px; 
+}

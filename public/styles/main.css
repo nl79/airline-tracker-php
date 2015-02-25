@@ -1,0 +1,37 @@
+body {
+    padding: 20px; 
+}
+
+#ul-main-menu li {
+    display: block;
+    float: left;
+    margin: 15px; 
+}
+
+#div-school-list {
+    max-height: 500px;
+    width: 35%; 
+    overflow-y: scroll;
+    float: left; 
+}
+
+#div-school-data {
+    max-height: 500px; 
+    margin-left: 36%;
+    width: 55%; 
+    overflow-y: scroll
+}
+
+table#table-school-data {
+    border-collapse: collapse;
+}
+
+table#table-school-data td {
+    padding: 5px;
+    
+}
+
+
+.div-clear-both {
+    clear: both; 
+}

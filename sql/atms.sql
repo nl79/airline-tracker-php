@@ -5,7 +5,7 @@ use nl79;
 
 DROP TABLE IF EXISTS aircraft_table; 
 CREATE TABLE aircraft_table(
-	entity_id		int		not null	auto_increment, 
+    entity_id		int		not null	auto_increment, 
     tail_number		int(5)	not null, 
     ac_type			char(4)	not null, 							-- aircrapt type
     fuel			int		not null, 

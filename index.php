@@ -11,13 +11,18 @@ require_once('library/loader.class.php');
 spl_autoload_register('library\\loader::load'); 
 
 //get the page from the request.
+/*
 $page = 'index';
 if(isset($_REQUEST['page']) && is_string($_REQUEST['page']) && !empty($_REQUEST['page'])) {
     $page = $_REQUEST['page']; 
 }
+*/
 
-$page = 'controller\\' . $page; 
-$controller = new $page();   
+
+$router = new library\Router(); 
+
+$page = 'controller\\' . $router->getNode(); 
+$controller = new $page($router);   
 
 #$controller = new controller\index();
 #load the twitter controller.

@@ -6,10 +6,12 @@ abstract class controller {
     #save the action value
     protected $_action = ""; 
     
-    public function __construct() {
+    public function __construct($router) {
         
         #get the action parameter.
-        $action = isset($_REQUEST['ac']) && !empty($_REQUEST['ac']) ? $_REQUEST['ac'] : 'index';
+        //$action = isset($_REQUEST['ac']) && !empty($_REQUEST['ac']) ? $_REQUEST['ac'] : 'index';
+        
+        $action = $router->hasNext() ? $router->getNode() : 'index'; 
         
         #call the appropriate action handler if it exists
         if(method_exists($this, $method = $action.'action')) {

@@ -15,9 +15,18 @@ CREATE TABLE aircraft_table(
 
 DROP TABLE IF EXISTS airport_table; 
 CREATE TABLE airport_table(
-	entity_id		int			not null	auto_increment, 
-    identifier		char(3)		not null, 					-- Identifier EX: (NWK - Newark Airport)
+    entity_id		int			not null	auto_increment, 
     `name`			char(50)	not null, 
+    city			char(150)	not null, 
+    country			char(150)	not null, 
+    faa_code		char(4)		null, 
+    icoa_code		char(5)		null, 
+    latitute		float(8,6)	null, 
+    longitude		float(8,6)	null,
+    altitude		float(10,2) null, 
+    timezone		float(4,2)	null, 
+    dst				char(2)		null, 
+    tx_db			char(50)	null,
     
     PRIMARY KEY(entity_id)
 ); 

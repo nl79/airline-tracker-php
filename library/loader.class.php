@@ -4,6 +4,7 @@ namespace library;
 class loader {
     
     public static function load($class) {
+        
         $class = trim($class, '\\');
         
         #split

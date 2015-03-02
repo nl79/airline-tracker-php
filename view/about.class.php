@@ -1,13 +1,13 @@
 <?php
 namespace view;
 
-class index extends view {
+class about extends view {
     
     /*
      *@method indexView() - default content for the index route
      */
     public function indexView($data) {
-        include('/public/index.html');
+        include('/public/partials/about.html');
         exit; 
         /*
         $this->_output .= $this->buildUL($data['list']);

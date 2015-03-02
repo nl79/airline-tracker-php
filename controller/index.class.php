@@ -4,7 +4,11 @@ namespace controller;
 class index extends controller{
     
     protected function indexAction () {
-        echo("index-index"); 
+        
+        /*
+         *load the view
+         */
+        $view = new \view\index('index', null); 
 
     }
     

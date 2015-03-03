@@ -33,7 +33,7 @@ abstract class view {
     }
     
     public function __destruct() {
-        
+         
     }
     
     private function menu() {

@@ -85,3 +85,60 @@ CREATE TABLE cargo_table(
 ); 
 
 
+-- Test data--
+-- aircraft table
+INSERT INTO aircraft_table(tail_number, ac_type,fuel)
+VALUES (11111, 'b747', 5000), 
+(11112, 'b777', 6500), 
+(11114, 'b767', 3400), 
+(11115, 'b737', 2500), 
+(11116, 'b737', 2000); 
+
+-- fight data. 
+INSERT INTO flight_table(origin_id, destination_id ,aircraft_id,departure_time, arrivate_time) 
+VALUES(3396, 3350, 1, now(), null), 
+(3396, 261, 2, now(), null), 
+(2576, 3396, 3, '2008-11-3', NOW()); 
+
+-- cargo table
+INSERT INTO cargo_table(aircraft_id, skid_id, weight, contents, mission, location)
+VALUES(1, 1111111, 1234, 'apples', 'apple delivery', 'cargo bay 1'), 
+(1, 1111112, 1235, 'peaches', 'peach delivery', 'cargo bay 2'), 
+(2, 1111113, 1236, 'gold', 'bail out', 'cargo bay 3'), 
+(2, 1111114, 1237, 'cars', 'bmw import', 'cargo bay 1'), 
+(3, 1111115, 1238, 'bubble gum', 'export delivery', 'cargo bay 2'); 
+
+
+-- Crew Type
+INSERT INTO crew_type_table (`type`, description)
+VALUES ('captain', 'primary pilot'), 
+('first officer', 'primary co-pilot'), 
+('second officer', 'secondary co-pilot'), 
+('flight engineer', 'responsible for technical duties aboard the plate'), 
+('navigator', 'responsible for nagivation'), 
+('attendant', 'flight crew attendant'), 
+('air gunner', 'primary weaponry operations'), 
+('Bombardier', 'primary bombing operator'), 
+('medic', 'primary flight medic'); 
+
+-- crew members. 
+INSERT INTO crew_table(type_id, aircraft_id, first_name , last_name)
+VALUES (1, 1, 'John', 'Smith'), 
+(2, 1, 'Wanda', 'Willis'), 
+(3, 1, 'Bob', 'Bobert'),
+(6, 1, 'Steve', 'Jobless'), 
+(6, 1, 'Bill', 'Doors'),
+(6, 1, 'Caron', 'Lazy'), 
+(1, 2, 'Steve', 'Smith'), 
+(2, 2, 'Amanda', 'Willis'), 
+(3, 2, 'Rob', 'Ruler'),
+(6, 2, 'Bob', 'Dart'), 
+(6, 2, 'Roney', 'Windows'),
+(6, 2, 'Steve', 'Laziness'), 
+(1, 3, 'StSmitheve', 'Smith'), 
+(2, 3, 'AmaWillisnda', 'Willis'), 
+(3, 3, 'Roasdfb', 'RulSmither'),
+(6, 3, 'BoWillisb', 'Dart'), 
+(6, 3, 'Ronssey', 'WinStevedows'),
+(6, 3, 'Stefsve', 'LaziSteveness');
+

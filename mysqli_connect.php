@@ -17,4 +17,5 @@ if (!$dbc) {
 	trigger_error ('Could not connect to MySQL: ' . mysqli_connect_error() );
 } else { // Otherwise, set the encoding:
 	mysqli_set_charset($dbc, 'utf8');
+	$GLOBALS['dbc'] = $dbc; 
 }

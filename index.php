@@ -27,7 +27,7 @@ define ('BASE_URL', '/it302register/public/');
 require_once('library/loader.class.php'); 
 spl_autoload_register('library\\loader::load');
 
-//require_once('mysqli_connect.php');
+require_once('mysqli_connect.php');
 
 /*
  *create a router object.

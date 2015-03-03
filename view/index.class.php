@@ -7,8 +7,10 @@ class index extends view {
      *@method indexView() - default content for the index route
      */
     public function indexView($data) {
+        $partial = 'home';
+        
         include('/public/index.html');
-        exit; 
+        exit;
         /*
         $this->_output .= $this->buildUL($data['list']);
         $this->_output .= "

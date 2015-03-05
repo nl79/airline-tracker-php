@@ -1,18 +1,32 @@
-<?php print_r($data) ?>
-
 <div id='div-home'>
     <div id='div-inbound-flights'>
         <h3>Inbound Flights</h3>
+        <?php
+        
+            $inbound = isset($data['inbound']) ? $data['inbound'] : array();
+            echo(library\html::table(array('data' => $inbound), true ));
+        ?> 
         
     </div>
     
     <div id='div-outbound-flights'>
+        
         <h3>Outbound Flights</h3>
+        <?php
+        
+            $outbound = isset($data['outbound']) ? $data['outbound'] : array();
+            echo(library\html::table(array('data' => $outbound), true ));
+        ?>
         
     </div>
     
     <div id='div-cargo'>
         <h3>Cargo</h3>
+        <?php
+        
+            $cargo = isset($data['cargo']) ? $data['cargo'] : array();
+            echo(library\html::table(array('data' => $cargo), true ));
+        ?>
         
     </div>
 </div>

@@ -13,24 +13,43 @@ class index extends controller{
                 FROM flight_table AS t1, aircraft_table AS t2, airport_table AS t3
                 WHERE t1.destination_id = 3396 AND t1.aircraft_id = t2.entity_id AND t1.origin_id = t3.entity_id';
         
-        $res1 = $dbc->query($sql);
-        print_r($res1->fetch_assoc()); 
+        $outbound = $dbc->query($sql);
+        
         
         //get the outbound flights.
         $sql = 'SELECT t1.*, t2.tail_number, t2.ac_type, t2.fuel, t3.`name`, t3.city, t3.country, t3.faa_code 
                 FROM flight_table AS t1, aircraft_table AS t2, airport_table AS t3
                 WHERE t1.origin_id = 3396 AND t1.aircraft_id = t2.entity_id AND t1.origin_id = t3.entity_id';
                 
-        $res2 = $dbc->query($sql);
-        print_r($res2->fetch_assoc());
+        $inbound = $dbc->query($sql);
         
         //cargo.
-        $sql = 'SELECT * '; 
-        
+        $sql = 'SELECT * FROM cargo_table';
+	
+	$cargo = $dbc->query($sql);
+	
+	//build a nested array to store the results and pass it to the view.
+	$data = array('inbound' => array(),
+		      'outbound' => array(),
+		      'cargo' => array());
+	
+	 
+	while($row = $outbound->fetch_assoc()){
+	    $data['outbound'][] = $row; 
+	}
+	
+	while($row = $inbound->fetch_assoc()){
+	    $data['inbound'][] = $row;  
+	}
+	
+	while($row = $cargo->fetch_assoc()){
+	     $data['cargo'][] = $row;  
+	}
+	
         /*
          *load the view
          */
-        $view = new \view\index('index', null); 
+        $view = new \view\index('index', $data); 
 
     }
     

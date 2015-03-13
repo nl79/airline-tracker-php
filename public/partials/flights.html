@@ -141,6 +141,10 @@
         minLength: 3
     });
 
+    $("input.flight-location-input").on('click', function(e){
+        this.select();
+    })
+
     /*
     wire the event handler for the save button.
      */
@@ -191,22 +195,55 @@
                 //post the data to the server.
                 $.ajax(settings).done(function(data){
 
-                    console.log(data);
+                    //var data = $.parseJson(data);
 
+                    //check the status code. if 200 call the add table function.
+                    if(data.statusCode && data.statusCode == 200) {
+
+                        addRow(data.row);
+
+                        //clear the form data.
+                        
+
+                    }else {
+                        //else display an error message.
+                        alert('Operation Failed - Try Again');
+                    }
                 });
-
-
             }
         }
-
     });
 
     /*
     wire the table body on click event.
      */
-    $("table#table-flight-schedule tbody").on("click", "tr", function(e){
+    $("table#table-flight-schedule").on("click", "tr", function(e){
         console.log(this);
     });
+
+
+    /*
+    push a new row object into the table.
+     */
+    function addRow(row) {
+        //$('table#table-flight-schedule').append(buildTr(row));
+        $('table#table-flight-schedule tr:first').after(buildTr(row));
+    }
+
+    function buildTr(obj) {
+        var tr;
+
+        tr = $('<tr/>').attr('id', ('entity_id-' +  obj['entity_id']));
+
+
+        for(key in obj) {
+
+            if(obj.hasOwnProperty(key)) {
+                tr.append("<td>" + obj[key] + "</td>")
+            }
+        }
+        return tr;
+    }
 
 
 </script>

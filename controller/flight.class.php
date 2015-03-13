@@ -35,7 +35,8 @@ class flight extends controller{
          */
         $sql = 'SELECT t1.*, t2.ac_type as "aircraft type" , t2.tail_number as "tail number"
                 FROM flight_table AS t1, aircraft_table AS t2
-                WHERE t1.aircraft_id = t2.entity_id';
+                WHERE t1.aircraft_id = t2.entity_id
+                ORDER BY t1.entity_id DESC';
 
         $flights = $dbc->query($sql);
 
@@ -59,7 +60,7 @@ class flight extends controller{
          * data will be updated instead.
          */
 
-        print_r($_REQUEST);
+        global $dbc;
 
         #valid flag.
         $valid = true;
@@ -105,8 +106,83 @@ class flight extends controller{
 
             /*
              * if valid, convert the hours and minutes
-             * to seconds and add it to the departure and arrival values. 
+             * to seconds and add it to the departure and arrival values.
              */
+
+            if($valid) {
+                $data['departure-date'] += ($data['departure-hour'] * 60 * 60);
+                $data['departure-date'] += ($data['departure-minute'] * 60);
+                $data['departure-date'] = date("Y-m-d H:i:s", $data['departure-date']);
+
+                $data['arrival-date'] += ($data['arrival-hour'] * 60 * 60);
+                $data['arrival-date'] += ($data['arrival-minute'] * 60);
+                $data['arrival-date'] = date("Y-m-d H:i:s", $data['arrival-date']);
+
+                /*
+                 *check if the entity_id is supplied.
+                 * if so, create an update query.
+                 * else create an insert query.
+                 */
+
+                $entity_id = isset($_REQUEST['entity-id'])
+                    && !empty($_REQUEST['entity-id'])
+                    && is_numeric($_REQUEST['entity-id']) ? $_REQUEST['entity-id'] : null;
+
+                #ARRAY OF REQUIRED FIELD NAMES
+                $fields = array('origin_id',
+                    'destination_id',
+                    'aircraft_id',
+                    'departure_time',
+                    'arrivate_time');
+
+                if(is_null($entity_id)) {
+                    # generate and insert query.
+                    $sql = 'INSERT INTO flight_table(' . implode(',', $fields) . ')
+                            VALUES(';
+
+                    $sql .= "'" . $dbc->escape_string($data['origin-id']) . "', ";
+                    $sql .= "'" . $dbc->escape_string($data['destination-id']) . "', ";
+                    $sql .= "'" . $dbc->escape_string($data['aircraft-id']) . "', ";
+                    $sql .= "'" . $dbc->escape_string($data['departure-date']) . "', ";
+                    $sql .= "'" . $dbc->escape_string($data['arrival-date']) . "'";
+                    $sql .= ')';
+
+                    #execute the query
+                    $result = $dbc->query($sql);
+
+                    if($result) {
+
+                        /*
+                         * if sucessfull query the database to get the new data in the
+                         * required format and return it. (pretty inefficient!).
+                         */
+
+                        $q = 'SELECT t1.*, t2.ac_type as "aircraft type" , t2.tail_number as "tail number"
+                                FROM flight_table AS t1, aircraft_table AS t2
+                                WHERE t1.aircraft_id = t2.entity_id and t1.entity_id =' . $dbc->insert_id;
+
+                        $result = $dbc->query($q);
+
+
+                        #build an output json object with a status code of 200 and the newly created record.
+
+                        $output = array('statusCode' => '200',
+                            'op' => 'new',
+                            'row' => $result->fetch_assoc());
+
+                        echo(json_encode($output));
+
+                        exit;
+
+                    } else {
+                        echo($dbc->error);
+                    }
+
+                } else {
+                    # generate an update query.
+                }
+
+            }
 
         }
 

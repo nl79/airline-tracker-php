@@ -18,8 +18,10 @@
 
     <!-- Our Website CSS Styles -->
     <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/jquery-ui.css">
 
     <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/jquery-ui-1.11.4/jquery-ui.js"></script>
 
 </head>
 <body ng-app="tutorialWebApp">
@@ -31,10 +33,14 @@
 <!-- Our Website Content Goes Here -->
 <nav id='nav-main' class="navbar-main navbar-fixed-top" role="navigation">
     <div class="container">
-        <!-- etc… -->
+        <!-- etcï¿½ -->
         
         <ul id='ul-nav-main'>
             <li><a  class='a-nav-main' href="/">Dashboard</a></li>
+            <li><a  class='a-nav-main' href="/flights">Flights</a></li>
+            <li><a  class='a-nav-main' href="/">Aircrafts</a></li>
+            <li><a  class='a-nav-main' href="/">Flight Crew</a></li>
+            <li><a  class='a-nav-main' href="/">Cargo</a></li>
         </ul>
         <!-- /.navbar-collapse -->
     </div>
@@ -45,7 +51,7 @@
     <!-- include the partial -->
     <?php
         if(isset($partial)) { 
-            include('/public/partials/' . $partial . '.html');
+            include('./public/partials/' . $partial . '.html');
         }
     ?>
     

@@ -1,0 +1,149 @@
+<?php
+    $aircrafts = isset($data['aircrafts']) ? $data['aircrafts'] : array();
+
+
+
+   function drawHourOptions() {
+
+    $html = "";
+
+    for($i = 1; $i <= 12; $i++) { $html .= "<option value='$i'>$i</option>"; }
+
+    return $html;
+
+   }
+
+    function drawMinuteOptions() {
+
+    $html = "";
+
+    for($i = 10; $i <= 60; $i += 10) { $html .= "<option value='$i'>$i</option>"; }
+
+    return $html;
+
+    }
+?>
+
+<div id="div-flights">
+
+    <h1>Flight Management</h1>
+
+    <form id="form-add-flight" method="post" action="/flights/add">
+        <span class="span-form-heading">New Flight</span>
+        <br />
+        <lable for="input-origin">Origin:
+            <input id="input-origin" type="text" class="flight-location-input" name="origin-id" value="" />
+        </lable>
+
+        <lable for="input-destination">Destination:
+            <input id="input-destination" type="text" class="flight-location-input" name="destination-id" value="" />
+        </lable>
+
+        <lable for="input-destination">Aircraft:
+            <select id="select-aircraft" name="aircraft-id">
+                <option>Select Aircraft</option>
+                <?php
+
+                    foreach($aircrafts as $item) {
+                        echo('<option value="' . $item['entity_id'] . '">' .
+                        $item['ac_type'] . '-' . $item['tail_number']);
+                    }
+
+                ?>
+            </select>
+        </lable>
+
+        <fieldset>
+            <legend>Departure:</legend>
+            <label for="input-departure-date">Date:</label>
+            <input id="input-departure-date" type="text" />
+
+            <select class="select-hours" name="departure-hour">
+                <option>Hour</option>
+                <?php echo(drawHourOptions()); ?>
+            </select>
+            <span>:</span>
+            <select class="select-minute" name="departure-minute">
+                <option>Minute</option>
+                <option value="0">00</option>
+                <?php echo(drawMinuteOptions()); ?>
+            </select>
+
+            <select class="select-ampm" name="departure-ampm">
+                <option value="am">AM</option>
+                <option value="pm">PM</option>
+            </select>
+        </fieldset>
+
+
+        <fieldset>
+            <legend>Arrival:</legend>
+            <label for="input-arrival-date">Date:</label>
+            <input id="input-arrival-date" type="text" />
+
+            <select class="select-hours" name="arrival-hour">
+                <option>Hour</option>
+                <?php echo(drawHourOptions()); ?>
+            </select>
+            <span>:</span>
+            <select class="select-minute" name="arrival-minute">
+                <option>Minute</option>
+                <option value="0">00</option>
+                <?php echo(drawMinuteOptions()); ?>
+            </select>
+
+            <select class="select-ampm" name="arrival-ampm">
+                <option value="am">AM</option>
+                <option value="pm">PM</option>
+            </select>
+
+        </fieldset>
+
+        <button id="button-save" type="button" parent="form-add-flight" name="button-add-flight">Save</button>
+
+    </form>
+</div>
+
+<script>
+
+    /*
+    departure and arrival date pickers.
+     */
+    $(function() {
+        $( "#input-departure-date" ).datepicker();
+    });
+
+
+    $(function() {
+        $( "#input-arrival-date" ).datepicker();
+    });
+
+    /*
+    wire the on mouseup event to the destination and origin
+    input boxes.
+     */
+    /*
+    $('.flight-location-input').on('keyup', function() {
+
+        console.log('here');
+    });
+    */
+    $("input.flight-location-input").autocomplete({
+        source: function (request, response) {
+            $.get("/airport/find", {
+                query: request.term
+            }, function (data) {
+
+
+                data = $.parseJSON(data);
+
+
+                response(data);
+            });
+        },
+        minLength: 3
+    });
+
+
+
+</script>

@@ -9,7 +9,7 @@ class index extends view {
     public function indexView($data) {
         $partial = 'home';
         
-        include('/public/index.html');
+        include('./public/index.html');
         exit;
         /*
         $this->_output .= $this->buildUL($data['list']);

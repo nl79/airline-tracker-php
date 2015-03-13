@@ -1,7 +1,7 @@
 <?php
 namespace view;
 
-class flights extends view {
+class flight extends view {
     
     /*
      *@method indexView() - default content for the index route

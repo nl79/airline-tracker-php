@@ -53,7 +53,24 @@ class html {
             
             foreach($data as $row) {
                 
-                $html .= '<tr>';
+
+
+                /*
+                 * check if id_field argument is specified.
+                 * if so, include the id_field value
+                 * as the row id value.
+                 */
+                if(isset($args['id_field']) && !empty($args['id_field'])) {
+                    #extract the field_id value.
+                    $id_field = html::getVal($args, 'id_field');
+
+                    #set the id_field value and the row field value as the row id.
+                    $html .= '<tr id="' . $id_field . '-' . $row[$id_field] . '" >';
+
+                } else {
+
+                    $html .= '<tr>';
+                }
                 
                 if(is_array($row)){
                     
@@ -96,15 +113,17 @@ class html {
                     foreach($row as $key => $value) {
                         
                         if(!is_scalar($value)) {
-                           $vTable[$key][] = '&nbsp;'; 
-                            
-                            continue; 
+
+                           $vTable[$key][] = '&nbsp;';
+
+                            continue;
                         }
                         
                         $vTable[$key][] = $value; 
                     }
                     
                 } else if(is_string($row)) {
+
                     $vTable[$key][] = $row; 
                 }
                 
@@ -112,11 +131,17 @@ class html {
             
             #loop through the $vTable and build the html controls.
             foreach($vTable as $row) {
-                $html .= '<tr>'; 
+
+                $html .= '<tr>';
+
                 foreach($row as $item) {
-                    $html .= '<td>' . $item . '</td>'; 
+
+                    $html .= '<td>' . $item . '</td>';
+
                 }
-                $html .= '</tr>'; 
+
+                $html .= '</tr>';
+
             }
         }
         

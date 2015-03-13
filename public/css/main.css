@@ -1,7 +1,15 @@
+table {
+    border-collapse: collapse;
+}
+
 nav#nav-main {
     border: 1px solid black; 
 }
 
 ul#ul-nav-main li{
     display: inline-block; 
+}
+
+.error {
+    border: 1px solid red;
 }

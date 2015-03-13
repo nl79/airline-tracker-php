@@ -1,25 +1,27 @@
 <?php
     $aircrafts = isset($data['aircrafts']) ? $data['aircrafts'] : array();
 
+    $flights = isset($data['flights']) ? $data['flights'] : array();
+
 
 
    function drawHourOptions() {
 
-    $html = "";
+        $html = "";
 
-    for($i = 1; $i <= 12; $i++) { $html .= "<option value='$i'>$i</option>"; }
+        for($i = 0; $i <= 23; $i++) { $html .= "<option value='$i'>$i</option>"; }
 
-    return $html;
+        return $html;
 
    }
 
     function drawMinuteOptions() {
 
-    $html = "";
+        $html = "";
 
-    for($i = 10; $i <= 60; $i += 10) { $html .= "<option value='$i'>$i</option>"; }
+        for($i = 10; $i <= 50; $i += 10) { $html .= "<option value='$i'>$i</option>"; }
 
-    return $html;
+        return $html;
 
     }
 ?>
@@ -28,20 +30,15 @@
 
     <h1>Flight Management</h1>
 
-    <form id="form-add-flight" method="post" action="/flights/add">
-        <span class="span-form-heading">New Flight</span>
+    <form id="form-add-flight" method="post" action="/flight/save">
+        <input id="input-entity-id" type="hidden" name="entity-id" value="" />
+        <h3>Flight Information</h3>
         <br />
-        <lable for="input-origin">Origin:
-            <input id="input-origin" type="text" class="flight-location-input" name="origin-id" value="" />
-        </lable>
 
-        <lable for="input-destination">Destination:
-            <input id="input-destination" type="text" class="flight-location-input" name="destination-id" value="" />
-        </lable>
 
         <lable for="input-destination">Aircraft:
-            <select id="select-aircraft" name="aircraft-id">
-                <option>Select Aircraft</option>
+            <select jq-validate id="select-aircraft" name="aircraft-id">
+                <option value="">Select Aircraft</option>
                 <?php
 
                     foreach($aircrafts as $item) {
@@ -53,55 +50,64 @@
             </select>
         </lable>
 
-        <fieldset>
-            <legend>Departure:</legend>
-            <label for="input-departure-date">Date:</label>
-            <input id="input-departure-date" type="text" />
+        <lable for="input-origin">Origin:
+            <input jq-validate id="input-origin" type="text" class="flight-location-input" name="origin-id" value="" />
+        </lable>
 
-            <select class="select-hours" name="departure-hour">
-                <option>Hour</option>
-                <?php echo(drawHourOptions()); ?>
-            </select>
-            <span>:</span>
-            <select class="select-minute" name="departure-minute">
-                <option>Minute</option>
-                <option value="0">00</option>
-                <?php echo(drawMinuteOptions()); ?>
-            </select>
+        <lable for="input-destination">Destination:
+            <input jq-validate id="input-destination" type="text" class="flight-location-input" name="destination-id" value="" />
+        </lable>
 
-            <select class="select-ampm" name="departure-ampm">
-                <option value="am">AM</option>
-                <option value="pm">PM</option>
-            </select>
-        </fieldset>
+        <br />
 
+        <label for="input-departure-date">Depart:</label>
+        <input jq-validate id="input-departure-date" type="text" name="departure-date"/>
 
-        <fieldset>
-            <legend>Arrival:</legend>
-            <label for="input-arrival-date">Date:</label>
-            <input id="input-arrival-date" type="text" />
+        <select jq-validate class="select-hours" name="departure-hour">
+            <option value="">Hour</option>
+            <?php echo(drawHourOptions()); ?>
+        </select>
+        <span>:</span>
+        <select jq-validate class="select-minute" name="departure-minute">
+            <option value="">Minute</option>
+            <option value="0">00</option>
+            <?php echo(drawMinuteOptions()); ?>
+        </select>
 
-            <select class="select-hours" name="arrival-hour">
-                <option>Hour</option>
-                <?php echo(drawHourOptions()); ?>
-            </select>
-            <span>:</span>
-            <select class="select-minute" name="arrival-minute">
-                <option>Minute</option>
-                <option value="0">00</option>
-                <?php echo(drawMinuteOptions()); ?>
-            </select>
+        <br />
+        <label for="input-arrival-date">Arrive:</label>
+        <input jq-validate id="input-arrival-date" type="text" name="arrival-date"/>
 
-            <select class="select-ampm" name="arrival-ampm">
-                <option value="am">AM</option>
-                <option value="pm">PM</option>
-            </select>
+        <select jq-validate class="select-hours" name="arrival-hour">
+            <option value="">Hour</option>
+            <?php echo(drawHourOptions()); ?>
+        </select>
+        <span>:</span>
+        <select jq-validate class="select-minute" name="arrival-minute">
+            <option value="">Minute</option>
+            <option value="0">00</option>
+            <?php echo(drawMinuteOptions()); ?>
+        </select>
 
-        </fieldset>
 
         <button id="button-save" type="button" parent="form-add-flight" name="button-add-flight">Save</button>
 
     </form>
+
+    <div id="div-recent-flights">
+
+        <h3>Current Flights</h3>
+
+        <?php
+
+            echo(library\html::table(array('data' => $flights,
+                                            'id_field' => 'entity_id',
+                                            'id'=>'table-flight-schedule',
+                                            'class'=>'table-flight-schedule'), true ));
+
+        ?>
+
+    </div>
 </div>
 
 <script>
@@ -122,28 +128,85 @@
     wire the on mouseup event to the destination and origin
     input boxes.
      */
-    /*
-    $('.flight-location-input').on('keyup', function() {
 
-        console.log('here');
-    });
-    */
     $("input.flight-location-input").autocomplete({
         source: function (request, response) {
             $.get("/airport/find", {
                 query: request.term
             }, function (data) {
 
-
-                data = $.parseJSON(data);
-
-
-                response(data);
+                response($.parseJSON(data));
             });
         },
         minLength: 3
     });
 
+    /*
+    wire the event handler for the save button.
+     */
+
+    $("button#button-save").on('click', function() {
+
+        //select the elements to validate.
+        var fields = $("[jq-validate]");
+
+        if(fields) {
+
+            //set the valid flag.
+            var valid = true;
+
+            fields.each(function(index) {
+
+                //if value is empty set an error class and flag to false.
+                if(!$(this).val()){
+                   $(this).addClass('error');
+                    valid = false;
+
+                } else {
+                    $(this).removeClass('error');
+                }
+
+            });
+
+            if(valid) {
+                /*
+                searlize the form data
+                 */
+                //get the parent attribute value of the button.
+
+                var formId = $(this).attr('parent');
+
+                //get the query string
+                var query = $('form#' + formId).serialize();
+
+                //ajax settings object.
+                var settings = {
+                    type:"POST",
+                    url: $('#' + formId).attr('action'),
+                    data: query,
+                    dataType: 'json'
+                };
+
+                //console.log(settings);
+                //post the data to the server.
+                $.ajax(settings).done(function(data){
+
+                    console.log(data);
+
+                });
+
+
+            }
+        }
+
+    });
+
+    /*
+    wire the table body on click event.
+     */
+    $("table#table-flight-schedule tbody").on("click", "tr", function(e){
+        console.log(this);
+    });
 
 
 </script>

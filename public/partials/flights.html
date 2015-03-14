@@ -191,9 +191,7 @@
                     dataType: 'json'
                 };
 
-                //console.log(settings);
-                //post the data to the server.
-                $.ajax(settings).done(function(data){
+                var callback = function(data){
 
                     //var data = $.parseJson(data);
 
@@ -203,13 +201,17 @@
                         addRow(data.row);
 
                         //clear the form data.
-                        
+                        $('form#' + formId).get(0).reset();
 
                     }else {
                         //else display an error message.
                         alert('Operation Failed - Try Again');
                     }
-                });
+                };
+
+                //console.log(settings);
+                //post the data to the server.
+                $.ajax(settings).done(callback);
             }
         }
     });
@@ -218,7 +220,47 @@
     wire the table body on click event.
      */
     $("table#table-flight-schedule").on("click", "tr", function(e){
-        console.log(this);
+
+        //display a dialog box that asks the user to delete the record.
+        var r = confirm('Confirm Delete?');
+
+        if(r == true) {
+
+            var that = this;
+
+            //ajax call to the delete hander.
+            var id = $(this).attr('id').split('-')[1];
+
+            if(!isNaN(id)) {
+
+                //ajax settings object.
+                var settings = {
+                    type:"POST",
+                    url: '/flight/delete',
+                    data: 'entity_id=' + id,
+                    dataType: 'json'
+                };
+
+                var callback = function(data){
+
+                   if(data.statusCode == 200){
+                       //remove the tr from the list.
+                       $(that).remove();
+
+                   } else {
+                       //display error.
+                   }
+                };
+
+                //console.log(settings);
+                //post the data to the server.
+                $.ajax(settings).done(callback);
+            }
+
+
+        } else {
+
+        }
     });
 
 

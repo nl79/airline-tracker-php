@@ -192,6 +192,54 @@ class flight extends controller{
 
     protected function deleteAction() {
 
+        /*
+         * get the entity_id
+         */
+        $id = isset($_REQUEST['entity_id']) &&
+            !empty($_REQUEST['entity_id']) &&
+            is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : null;
+
+        if(!is_null($id)){
+
+            global $dbc;
+
+            /*
+             * build the delete query.
+             */
+            $sql = 'DELETE FROM flight_table WHERE entity_id =' . $id;
+
+            /*
+             * execute the query and build a responce object.
+             */
+            $result = $dbc->query($sql);
+
+            if($result && $dbc->affected_rows > 0) {
+                $output = array('statusCode' => 200,
+                    'op' => 'delete',
+                    'message' => 'sucess',
+                    'affected_rows' => $dbc->affected_rows,
+                    'entity_id' => $id);
+
+
+            } else {
+                $output = array('statusCode' => 500,
+                    'op' => 'delete',
+                    'message' => $dbc->error,
+                    'affected_rows' => $dbc->affected_rows,
+                    'entity_id' => $id);
+            }
+
+
+        } else {
+            $output = array('statusCode' => 500,
+                'op' => 'delete',
+                'message' => 'invalid id supplied');
+        }
+
+        echo(json_encode($output));
+
+        exit;
+
     }
 
     protected function getAction() {

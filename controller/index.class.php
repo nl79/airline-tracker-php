@@ -6,7 +6,8 @@ class index extends controller{
     protected function indexAction () {
         
         //load the flight data.
-        $dbc = isset($GLOBALS['dbc']) ? $GLOBALS['dbc'] : null; 
+        //$dbc = isset($GLOBALS['dbc']) ? $GLOBALS['dbc'] : null;
+        global $dbc;
         
         //get the inbould flights.
         $sql = 'SELECT t1.*, t2.tail_number, t2.ac_type, t2.fuel, t3.`name`, t3.city, t3.country, t3.faa_code 

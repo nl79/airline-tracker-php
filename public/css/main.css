@@ -2,6 +2,11 @@ table {
     border-collapse: collapse;
 }
 
+table#table-flight-schedule tr:hover {
+    background-color: palegreen;
+    cursor: pointer;
+}
+
 nav#nav-main {
     border: 1px solid black; 
 }

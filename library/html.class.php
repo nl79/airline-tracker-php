@@ -30,7 +30,9 @@ class html {
         $data = html::getVal($args, 'data');
          
         #build the table. 
-        $html = "<table id='" . html::getVal($args, 'id') . "' border='" . html::getVal($args, 'border') . " '>";
+        $html = "<table id='" . html::getVal($args, 'id') .
+            "' class='" . html::getVal($args, 'class') .
+            "' border='" . html::getVal($args, 'border') . " '>";
         
         #check if the headings flag is set and extract the headings.
         if($headings == true) {

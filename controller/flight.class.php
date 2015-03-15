@@ -168,7 +168,7 @@ class flight extends controller{
 
                         $output = array('statusCode' => '200',
                             'op' => 'new',
-                            'row' => $result->fetch_assoc());
+                            'data' => $result->fetch_assoc());
 
                         echo(json_encode($output));
 

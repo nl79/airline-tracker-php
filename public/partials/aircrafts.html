@@ -1,0 +1,114 @@
+<?php
+    $aircrafts = isset($data['aircrafts']) ? $data['aircrafts'] : array();
+
+?>
+
+<div id="div-aircrafts">
+    <h1>Aircraft Management</h1>
+
+    <form id="form-aircraft-save" method="POST" action="aircraft/save">
+
+        <input id="input-entity-id" type="hidden" name="entity_id" value="" />
+
+        <h3>Aircraft Information</h3>
+
+        <lable for="input-tail-number">Tail Number:</lable>
+        <input jq-validate data-type="int"
+               id="input-tail-number"
+               name="tail_number" value=""
+               maxlength="5"/>
+
+        <label for="input-ac-type">Aircraft Type:</label>
+        <input jq-validate
+               id="input-ac-type"
+               name="ac_type" value=""
+               maxlength="4"/>
+
+        <label for="input-fuel">Fuel:</label>
+        <input jq-validate data-type="int"
+               id="input-fuel"
+               name="fuel" value=""
+               maxlength="10"/>
+
+        <button id="button-save"
+                type="button"
+                parent="form-aircraft-save"
+                name="button-save-aircraft">Save</button>
+
+    </form>
+
+    <h3>Current Fleet</h3>
+
+    <?php
+
+            echo(library\html::table(array('data' => $aircrafts,
+    'id_field' => 'entity_id',
+    'id'=>'table-aircraft-list',
+    'class'=>'table-record-list'), true ));
+
+    ?>
+</div>
+
+
+<script>
+
+    $("button#button-save").on('click', function() {
+        save.call(this);
+    });
+
+    /*
+     wire the table body on click event.
+     */
+
+    $("table.table-record-list").on("click", "tr", function(e){
+
+        var entity_id = $(this).attr('id').split('-')[1];
+
+        if(entity_id && !isNaN(entity_id)) {
+            /*
+            ajax call to get the most recent values from the
+            backend database.
+            */
+            //ajax settings object.
+            var settings = {
+                type:"POST",
+                url: '/aircraft/view',
+                data: 'entity_id=' + entity_id,
+                dataType: 'json',
+                beforeSubmit: busy(),
+                success: free()
+            };
+
+            var callback = function(data){
+
+                if(data.statusCode == 200){
+
+                    /*
+                    if request was successful
+                    loop over the object and set the
+                    element values with the key names
+                    to the values.
+                    */
+
+                    if(data.data) {
+
+                        for(key in data.data) {
+
+                            if(data.data.hasOwnProperty(key)) {
+                                //get the element using the key.
+                                $('[name="' + key + '"]').val(data.data[key]);
+                            }
+                        }
+                    }
+
+                } else {
+                    //display error.
+                }
+            };
+
+            //post the data to the server.
+            $.ajax(settings).done(callback);
+        }
+    });
+
+</script>

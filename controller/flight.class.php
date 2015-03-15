@@ -167,7 +167,7 @@ class flight extends controller{
                         #build an output json object with a status code of 200 and the newly created record.
 
                         $output = array('statusCode' => '200',
-                            'op' => 'new',
+                            'op' => 'insert',
                             'data' => $result->fetch_assoc());
 
                         echo(json_encode($output));

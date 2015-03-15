@@ -75,8 +75,8 @@
                 url: '/aircraft/view',
                 data: 'entity_id=' + entity_id,
                 dataType: 'json',
-                beforeSubmit: busy(),
-                success: free()
+                beforeSend: busy,
+                success: free
             };
 
             var callback = function(data){

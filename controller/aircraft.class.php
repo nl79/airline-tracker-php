@@ -84,6 +84,9 @@ class aircraft extends controller{
         exit;
     }
 
+    /*
+     * @mthod saveAction() - saves or updates record data based on the method called.
+     */
     protected function saveAction() {
 
         global $dbc;
@@ -154,7 +157,46 @@ class aircraft extends controller{
                 && is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : null;
 
             #if entity_id is not null and is numeric, build an update query.
-            if(!is_numeric($id) && is_numeric($id)) {
+            if(!is_null($id) && is_numeric($id)) {
+
+                /*
+                 * build an update query for the supplied entity_id.
+                 */
+
+                $sql = 'UPDATE aircraft_table SET ';
+
+                foreach($required as $key => $type) {
+                    $sql .= $key . "='" . $dbc->escape_string($data[$key]) . "',";
+                }
+
+                #trim off the trailing comma.
+                $sql = rtrim($sql, ',');
+
+                $sql .= ' WHERE entity_id=' . $dbc->escape_string($id);
+
+                $res = $dbc->query($sql);
+
+                if($res && $dbc->affected_rows > 0) {
+
+                    /*
+                   *array_merge is required to have entity_id as the first key in the array.
+                   * This will maintain consistency between output to the front-end.
+                   */
+                    $row = array_merge(array('entity_id' => $id), $data);
+
+                    $output = array('statusCode' => 200,
+                        'op' => 'update',
+                        'data' => $row,
+                        'entity_id' => $id);
+
+                } else {
+                    # return an error object.
+                    $output = array('statusCode' => 500,
+                        'op' => 'update',
+                        'error' => $dbc->error);
+                }
+
+
 
             } else if(is_null($id)) {
 
@@ -182,17 +224,24 @@ class aircraft extends controller{
                     $row = array_merge(array('entity_id' => $dbc->insert_id), $data);
 
                     $output = array('statusCode' => 200,
-                        'op' => 'new',
+                        'op' => 'insert',
                         'data' => $row);
 
                 } else {
 
                     # return an error object.
                     $output = array('statusCode' => 500,
-                        'op' => 'new',
+                        'op' => 'insert',
                         'error' => $dbc->error);
                 }
             }
+        } else {
+
+            $output = array(
+                'statusCode' => 400,
+                'op' => 'select',
+                'error' => "invalid entity_id supplied"
+            );
         }
 
         echo(json_encode($output));

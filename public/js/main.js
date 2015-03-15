@@ -6,9 +6,11 @@ $( document ).ready(function() {
 
 function busy() {
     $('selector').css( 'cursor', 'wait' );
+    console.log('busy');
 }
 
 function free() {
+    console.log('free');
     $('selector').css( 'cursor', 'auto' );
 }
 
@@ -78,11 +80,26 @@ function save() {
                 //check the status code. if 200 call the add table function.
                 if(data.statusCode && data.statusCode == 200) {
 
+                    /*
+                    check the OP property. if new, insert a TR, else replace with
+                    an updated version.
+                     */
+                    if(data.op == 'update') {
 
-                    $('table.table-record-list tr:first').after(buildTr(data.data));
+                        /*
+                        select the tr with the ID field equaled to the updated record id.
+                         */
 
-                    //clear the form data.
-                    $('form#' + formId).get(0).reset();
+                        console.log(data);
+                        $("tr#entity_id-" + data.entity_id).replaceWith(buildTr(data.data));
+
+
+                    } else if(data.op == 'insert') {
+                        $('table.table-record-list tr:first').after(buildTr(data.data));
+
+                        //clear the form data.
+                        $('form#' + formId).get(0).reset();
+                    }
 
                 }else {
                     //else display an error message.

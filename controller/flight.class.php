@@ -185,9 +185,6 @@ class flight extends controller{
             }
 
         }
-
-
-
     }
 
     protected function deleteAction() {

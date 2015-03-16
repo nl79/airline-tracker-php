@@ -35,6 +35,13 @@
                 parent="form-aircraft-save"
                 name="button-save-aircraft">Save</button>
 
+        <span>|</span>
+        <button id="button-delete"
+                type="button"
+                target="input-entity-id"
+                url="/aircraft/delete"
+                name="button-delete-aircraft">Delete</button>
+
     </form>
 
     <h3>Current Fleet</h3>
@@ -54,6 +61,10 @@
 
     $("button#button-save").on('click', function() {
         save.call(this);
+    });
+
+    $("button#button-delete").on('click', function() {
+        remove.call(this);
     });
 
     /*

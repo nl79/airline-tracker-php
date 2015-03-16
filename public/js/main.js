@@ -29,6 +29,44 @@ function buildTr(obj) {
     return tr;
 }
 
+function remove() {
+
+    var id = $('input#input-entity-id').val();
+
+    if(id && !isNaN(id)) {
+
+        //get the url property.
+        var url = $(this).attr('url');
+
+        //ajax settings object.
+        var settings = {
+            type:"POST",
+            url: url,
+            data: 'entity_id=' + id,
+            dataType: 'json'
+        };
+
+        var callback = function(data){
+
+            if(data.statusCode == 200){
+                //remove the tr from the list.
+                $("tr#entity_id-" + data.entity_id).remove();
+
+            } else {
+                //display error.
+                alert(data.message);
+            }
+        };
+
+        //post the data to the server.
+        $.ajax(settings).done(callback);
+
+    } else {
+        alert("No Valid Record Selected. \nPlease Select an Existing" +
+        " record from the list.");
+    }
+}
+
 function save() {
     //select the elements to validate.
     var fields = $("[jq-validate]");
@@ -77,6 +115,8 @@ function save() {
 
                 //var data = $.parseJson(data);
 
+                console.log(data);
+
                 //check the status code. if 200 call the add table function.
                 if(data.statusCode && data.statusCode == 200) {
 
@@ -90,7 +130,6 @@ function save() {
                         select the tr with the ID field equaled to the updated record id.
                          */
 
-                        console.log(data);
                         $("tr#entity_id-" + data.entity_id).replaceWith(buildTr(data.data));
 
 
@@ -112,6 +151,5 @@ function save() {
             $.ajax(settings).done(callback);
         }
     }
-
 }
 

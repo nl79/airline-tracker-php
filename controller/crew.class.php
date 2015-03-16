@@ -9,7 +9,7 @@
 namespace controller;
 
 
-class aircraft extends controller{
+class crew extends controller{
 
     protected function indexAction() {
 
@@ -19,8 +19,31 @@ class aircraft extends controller{
         $data = array();
 
         /*
-         * select all of the aircraft records.
+         * select all of the crew records.
          */
+
+        $sql = 'SELECT * FROM crew_table ORDER BY entity_id DESC';
+
+        $crew = $dbc->query($sql);
+
+        while($row = $crew->fetch_assoc()){
+            $data['crew'][] = $row;
+        }
+
+        /*
+         * select all the crew_type records.
+         */
+        $sql = 'SELECT * FROM crew_type_table';
+
+        $type = $dbc->query($sql);
+
+        while($row = $type->fetch_assoc()){
+            $data['type'][] = $row;
+        }
+
+        /*
+          * select all of the aircraft records.
+          */
 
         $sql = 'SELECT * FROM aircraft_table ORDER BY entity_id DESC';
 
@@ -34,7 +57,7 @@ class aircraft extends controller{
         /*
          *load the view
          */
-        $view = new \view\aircraft('index', $data);
+        $view = new \view\crew('index', $data);
 
 
     }
@@ -45,13 +68,13 @@ class aircraft extends controller{
     protected function viewAction() {
 
         $id = isset($_REQUEST['entity_id'])
-            && !empty($_REQUEST['entity_id'])
-                && is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : null;
+        && !empty($_REQUEST['entity_id'])
+        && is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : null;
 
         if(!is_null($id)) {
             global $dbc;
 
-            $sql = 'SELECT * FROM aircraft_table WHERE entity_id=' . $dbc->escape_string($id);
+            $sql = 'SELECT * FROM crew_table WHERE entity_id=' . $dbc->escape_string($id);
 
             $res = $dbc->query($sql);
 
@@ -101,7 +124,7 @@ class aircraft extends controller{
             /*
              * build the delete query.
              */
-            $sql = 'DELETE FROM aircraft_table WHERE entity_id =' . $id;
+            $sql = 'DELETE FROM crew_table WHERE entity_id =' . $id;
 
             /*
              * execute the query and build a responce object.
@@ -146,9 +169,10 @@ class aircraft extends controller{
         global $dbc;
 
         #require fields
-        $required = array('tail_number' => 'i',
-            'ac_type' => 's',
-            'fuel' => 'i');
+        $required = array('type_id' => 'i',
+            'aircraft_id' => 'i',
+            'first_name' => 's',
+            'last_name' => 's');
 
         $data = array() ;
 
@@ -207,8 +231,8 @@ class aircraft extends controller{
 
             #get the entity_id
             $id = isset($_REQUEST['entity_id'])
-                && !empty($_REQUEST['entity_id'])
-                && is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : null;
+            && !empty($_REQUEST['entity_id'])
+            && is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : null;
 
             #if entity_id is not null and is numeric, build an update query.
             if(!is_null($id) && is_numeric($id)) {
@@ -217,7 +241,7 @@ class aircraft extends controller{
                  * build an update query for the supplied entity_id.
                  */
 
-                $sql = 'UPDATE aircraft_table SET ';
+                $sql = 'UPDATE crew_table SET ';
 
                 foreach($required as $key => $type) {
                     $sql .= $key . "='" . $dbc->escape_string($data[$key]) . "',";
@@ -255,7 +279,7 @@ class aircraft extends controller{
             } else if(is_null($id)) {
 
                 #if entity_id is null, build an insert query.
-                $sql = 'INSERT INTO aircraft_table (' . implode(',', array_keys($required)) . ') VALUES (';
+                $sql = 'INSERT INTO crew_table (' . implode(',', array_keys($required)) . ') VALUES (';
 
                 foreach($data as $field) {
                     $sql .= "'" . $dbc->escape_string($field) . "',";
@@ -293,8 +317,8 @@ class aircraft extends controller{
 
             $output = array(
                 'statusCode' => 400,
-                'op' => 'select',
-                'error' => "invalid entity_id supplied"
+                'op' => 'save',
+                'error' => "invalid data supplied"
             );
         }
 

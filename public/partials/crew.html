@@ -1,0 +1,130 @@
+<?php
+    $crew = isset($data['crew']) ? $data['crew'] : array();
+
+    $type = isset($data['type']) ? $data['type'] : array();
+
+    $aircrafts = isset($data['aircrafts']) ? $data['aircrafts'] : array();
+
+?>
+<div id="div-crew">
+    <h1>Crew Management</h1>
+
+    <form id="form-crew-save" method="POST" action="crew/save">
+
+        <input id="input-entity-id" type="hidden" name="entity_id" value="" />
+
+        <h3>Crew Information</h3>
+
+        <lable for="input-first-name">First Name:</lable>
+        <input jq-validate id="input-first-name" type="text" name="first_name" value="">
+
+        <label for="input-last-name">Last Name:</label>
+        <input jq-validate id="input-last-name" type="text" name="last_name" value="">
+
+        <lable for="select-crew-type">Type:</lable>
+        <select jq-validate id="select-crew-type" name="type_id">
+            <option value="">Select Type</option>
+            <?php foreach($type as $item) {
+                echo("<option value='" . $item['entity_id'] . "'>" . $item['type'] . "</option>");
+            }
+            ?>
+        </select>
+
+        <lable for="select-aircraft">Aircraft:</lable>
+        <select jq-validate id="select-aircraft" name="aircraft_id">
+            <option value="">Select Aircraft</option>
+            <?php foreach($aircrafts as $item) {
+                echo("<option value='" . $item['entity_id'] . "'>" . $item['ac_type'] . " - " . $item['tail_number'] . "</option>");
+            }
+            ?>
+        </select>
+
+        <button id="button-save"
+                type="button"
+                parent="form-crew-save"
+                name="button-save-crew">Save</button>
+
+        <span>|</span>
+        <button id="button-delete"
+                type="button"
+                target="input-entity-id"
+                url="/crew/delete"
+                name="button-delete-crew">Delete</button>
+
+    </form>
+
+    <h3>Current Crew</h3>
+
+    <?php
+
+            echo(library\html::table(array('data' => $crew,
+    'id_field' => 'entity_id',
+    'id'=>'table-crew-list',
+    'class'=>'table-record-list'), true ));
+
+    ?>
+
+</div>
+
+<script>
+
+    $("button#button-save").on('click', function() {
+        save.call(this);
+    });
+
+    $("button#button-delete").on('click', function() {
+        remove.call(this);
+    });
+
+    $("table.table-record-list").on("click", "tr", function(e){
+
+        var entity_id = $(this).attr('id').split('-')[1];
+
+        if(entity_id && !isNaN(entity_id)) {
+            /*
+             ajax call to get the most recent values from the
+             backend database.
+             */
+            //ajax settings object.
+            var settings = {
+                type:"POST",
+                url: '/crew/view',
+                data: 'entity_id=' + entity_id,
+                dataType: 'json',
+                beforeSend: busy,
+                success: free
+            };
+
+            var callback = function(data){
+
+                if(data.statusCode == 200){
+
+                    /*
+                     if request was successful
+                     loop over the object and set the
+                     element values with the key names
+                     to the values.
+                     */
+
+                    if(data.data) {
+
+                        for(key in data.data) {
+
+                            if(data.data.hasOwnProperty(key)) {
+                                //get the element using the key.
+                                $('[name="' + key + '"]').val(data.data[key]);
+                            }
+                        }
+                    }
+
+                } else {
+                    //display error.
+                }
+            };
+
+            //post the data to the server.
+            $.ajax(settings).done(callback);
+        }
+    });
+
+</script>

@@ -1,0 +1,126 @@
+<?php
+    $cargo = isset($data['cargo']) ? $data['cargo'] : array();
+
+    $aircrafts = isset($data['aircrafts']) ? $data['aircrafts'] : array();
+
+?>
+<div id="div-cargo">
+    <h1>Cargo Management</h1>
+
+    <form id="form-cargo-save" method="POST" action="cargo/save">
+
+        <input id="input-entity-id" type="hidden" name="entity_id" value="" />
+
+        <lable for="select-aircraft">Aircraft:</lable>
+        <select jq-validate id="select-aircraft" name="aircraft_id">
+            <option value="">Select Aircraft</option>
+            <?php foreach($aircrafts as $item) {
+                echo("<option value='" . $item['entity_id'] . "'>" . $item['ac_type'] . " - " . $item['tail_number'] . "</option>");
+            }
+            ?>
+        </select>
+
+        <lable for="input-skid-id">Skid-ID:</lable>
+        <input jq-validate id="input-skid-id" type="text" name="skid_id" value="">
+
+        <lable for="input-weight">Weight:</lable>
+        <input jq-validate id="input-weight" type="text" name="weight" value="">
+
+        <lable for="input-content">Content:</lable>
+        <input jq-validate id="input-content" type="text" name="contents" value="">
+
+        <lable for="input-mission">Mission:</lable>
+        <input jq-validate id="input-mission" type="text" name="mission" value="">
+
+        <lable for="input-location">Location:</lable>
+        <input jq-validate id="input-location" type="text" name="location" value="">
+
+        <button id="button-save"
+                type="button"
+                parent="form-cargo-save"
+                name="button-save-cargo">Save</button>
+
+        <span>|</span>
+        <button id="button-delete"
+                type="button"
+                target="input-entity-id"
+                url="/cargo/delete"
+                name="button-delete-cargo">Delete</button>
+
+    </form>
+
+    <h3>Current Cargo</h3>
+
+    <?php
+
+            echo(library\html::table(array('data' => $cargo,
+    'id_field' => 'entity_id',
+    'id'=>'table-cargo-list',
+    'class'=>'table-record-list'), true ));
+
+    ?>
+
+</div>
+
+<script>
+
+    $("button#button-save").on('click', function() {
+        save.call(this);
+    });
+
+    $("button#button-delete").on('click', function() {
+        remove.call(this);
+    });
+
+    $("table.table-record-list").on("click", "tr", function(e){
+
+        var entity_id = $(this).attr('id').split('-')[1];
+
+        if(entity_id && !isNaN(entity_id)) {
+            /*
+             ajax call to get the most recent values from the
+             backend database.
+             */
+            //ajax settings object.
+            var settings = {
+                type:"POST",
+                url: '/cargo/view',
+                data: 'entity_id=' + entity_id,
+                dataType: 'json',
+                beforeSend: busy,
+                success: free
+            };
+
+            var callback = function(data){
+
+                if(data.statusCode == 200){
+
+                    /*
+                     if request was successful
+                     loop over the object and set the
+                     element values with the key names
+                     to the values.
+                     */
+
+                    if(data.data) {
+
+                        for(key in data.data) {
+
+                            if(data.data.hasOwnProperty(key)) {
+                                //get the element using the key.
+                                $('[name="' + key + '"]').val(data.data[key]);
+                            }
+                        }
+                    }
+
+                } else {
+                    //display error.
+                }
+            };
+
+            //post the data to the server.
+            $.ajax(settings).done(callback);
+        }
+    });
+
+</script>

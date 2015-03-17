@@ -159,7 +159,7 @@ class cargo extends controller{
 
         #require fields
         $required = array('aircraft_id' => 'i',
-            'skid_id' => 'i', 
+            'skid_id' => 'i',
             'weight' => 'd',
             'contents' => 's',
             'mission' => 's',

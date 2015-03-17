@@ -4,7 +4,15 @@ namespace controller;
 class index extends controller{
     
     protected function indexAction () {
-        
+
+        /*
+         * default airport ID.
+         */
+
+        $entity_id = isset($_REQUEST['entity_id']) &&
+            !empty($_REQUEST['entity_id']) &&
+            is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : 3396;
+
         //load the flight data.
         //$dbc = isset($GLOBALS['dbc']) ? $GLOBALS['dbc'] : null;
         global $dbc;
@@ -12,7 +20,7 @@ class index extends controller{
         //get the inbould flights.
         $sql = 'SELECT t1.*, t2.tail_number, t2.ac_type, t2.fuel, t3.`name`, t3.city, t3.country, t3.faa_code 
                 FROM flight_table AS t1, aircraft_table AS t2, airport_table AS t3
-                WHERE t1.destination_id = 3396 AND t1.aircraft_id = t2.entity_id AND t1.origin_id = t3.entity_id';
+                WHERE t1.destination_id = ' . $dbc->escape_string($entity_id) .' AND t1.aircraft_id = t2.entity_id AND t1.origin_id = t3.entity_id';
         
         $outbound = $dbc->query($sql);
         
@@ -20,7 +28,7 @@ class index extends controller{
         //get the outbound flights.
         $sql = 'SELECT t1.*, t2.tail_number, t2.ac_type, t2.fuel, t3.`name`, t3.city, t3.country, t3.faa_code 
                 FROM flight_table AS t1, aircraft_table AS t2, airport_table AS t3
-                WHERE t1.origin_id = 3396 AND t1.aircraft_id = t2.entity_id AND t1.origin_id = t3.entity_id';
+                WHERE t1.origin_id = ' . $dbc->escape_string($entity_id) .' AND t1.aircraft_id = t2.entity_id AND t1.origin_id = t3.entity_id';
                 
         $inbound = $dbc->query($sql);
         

@@ -31,7 +31,13 @@ require_once('../mysqli_connect.php');
 /*
  *create a router object.
  */ 
-$router = new library\Router();
+ /*
+echo('<pre>'); 
+print_r($_SERVER); 
+echo('</pre>'); 
+*/
+
+$router = new \library\Router();
 
 
 #build the page object.

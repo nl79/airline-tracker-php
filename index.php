@@ -33,6 +33,8 @@ require_once('../mysqli_connect.php');
  */ 
 $router = new library\Router();
 
-#build the page object. 
-$page = 'controller\\' . $router->getNode(); 
+
+#build the page object.
+
+$page = 'controller\\' . $router->getNode();
 $controller = new $page($router);   

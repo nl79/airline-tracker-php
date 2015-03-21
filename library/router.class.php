@@ -33,6 +33,7 @@ class Router {
      *@method parse - parse the raw request uri string into array elements.
      *@return nothing
      */
+    /*
     private function parse() {
         
         $r_uri = $_SERVER['REQUEST_URI'];
@@ -55,6 +56,18 @@ class Router {
         foreach($request_uri_parts as $item) {
             if(!empty($item)) { $this->_nodes[] = $item; } 
         }
+    }
+    */
+    private function parse() {
+        /*
+         * extract the pg and ac variables from the request array.
+         */
+
+        $pg = isset($_REQUEST['pg']) && !empty($_REQUEST['pg']) ? $_REQUEST['pg'] : 'index';
+        $ac = isset($_REQUEST['ac']) && !empty($_REQUEST['ac']) ? $_REQUEST['ac'] : 'index';
+
+        $this->_nodes[] = $pg;
+        $this->_nodes[] = $ac;
     }
     
     

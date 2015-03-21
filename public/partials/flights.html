@@ -131,7 +131,7 @@
 
     $("input.flight-location-input").autocomplete({
         source: function (request, response) {
-            $.get("/airport/find", {
+            $.get("?pg=airport&ac=find", {
                 query: request.term
             }, function (data) {
 
@@ -172,7 +172,7 @@
                 //ajax settings object.
                 var settings = {
                     type:"POST",
-                    url: '/flight/delete',
+                    url: '?pg=flight&ac=delete',
                     data: 'entity_id=' + id,
                     dataType: 'json'
                 };

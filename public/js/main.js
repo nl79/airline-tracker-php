@@ -103,10 +103,23 @@ function save() {
             //get the query string
             var query = $('form#' + formId).serialize();
 
+            /*
+            extract the form action and parse it into key=value pairs.
+             */
+            var action = $('#' + formId).attr('action');
+
+            /*rigged code because the server does not offer mod_rewrite*/
+            var parts = action.split('/');
+            //add the parts to the query string.
+            query += "&pg=" + parts[0];
+            query += "&ac=" + parts[1];
+            /***********************************************************/
+
             //ajax settings object.
             var settings = {
                 type:"POST",
-                url: $('#' + formId).attr('action'),
+                url: '',
+                //url: $('#' + formId).attr('action'),
                 data: query,
                 dataType: 'json'
             };

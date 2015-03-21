@@ -19,8 +19,6 @@ date_default_timezone_set('America/New_York');
 #define ('BASE_URL', 'http://osl81.njit.edu/~nl79/it490/');
 define('BASE_URL', 'localhost/');
 
-
-
 /*
  *require the autoloader class.
  *set the autoloader. 

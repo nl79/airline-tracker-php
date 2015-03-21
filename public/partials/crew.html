@@ -8,20 +8,20 @@
 ?>
 <div id="div-crew">
     <h1>Crew Management</h1>
-
+    <h3>Crew Information</h3>
     <form id="form-crew-save" method="POST" action="crew/save">
 
         <input id="input-entity-id" type="hidden" name="entity_id" value="" />
 
-        <h3>Crew Information</h3>
 
-        <lable for="input-first-name">First Name:</lable>
+
+        <label for="input-first-name">First Name:</label>
         <input jq-validate id="input-first-name" type="text" name="first_name" value="">
 
         <label for="input-last-name">Last Name:</label>
         <input jq-validate id="input-last-name" type="text" name="last_name" value="">
 
-        <lable for="select-crew-type">Type:</lable>
+        <label for="select-crew-type">Type:</label>
         <select jq-validate id="select-crew-type" name="type_id">
             <option value="">Select Type</option>
             <?php foreach($type as $item) {
@@ -30,7 +30,7 @@
             ?>
         </select>
 
-        <lable for="select-aircraft">Aircraft:</lable>
+        <label for="select-aircraft">Aircraft:</label>
         <select jq-validate id="select-aircraft" name="aircraft_id">
             <option value="">Select Aircraft</option>
             <?php foreach($aircrafts as $item) {
@@ -60,7 +60,7 @@
     </form>
 
     <h3>Current Crew</h3>
-
+    <div id="div-table-container">
     <?php
 
             echo(library\html::table(array('data' => $crew,
@@ -69,6 +69,8 @@
     'class'=>'table-record-list'), true ));
 
     ?>
+
+    </div>
 
 </div>
 

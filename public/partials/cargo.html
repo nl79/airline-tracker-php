@@ -6,12 +6,12 @@
 ?>
 <div id="div-cargo">
     <h1>Cargo Management</h1>
-
+    <h3>Cargo Information</h3>
     <form id="form-cargo-save" method="POST" action="cargo/save">
 
         <input id="input-entity-id" type="hidden" name="entity_id" value="" />
 
-        <lable for="select-aircraft">Aircraft:</lable>
+        <label for="select-aircraft">Aircraft:</label>
         <select jq-validate id="select-aircraft" name="aircraft_id">
             <option value="">Select Aircraft</option>
             <?php foreach($aircrafts as $item) {
@@ -20,21 +20,22 @@
             ?>
         </select>
 
-        <lable for="input-skid-id">Skid-ID:</lable>
+        <label for="input-skid-id">Skid-ID:</label>
         <input jq-validate id="input-skid-id" type="text" name="skid_id" value="">
 
-        <lable for="input-weight">Weight:</lable>
+        <label for="input-weight">Weight:</label>
         <input jq-validate id="input-weight" type="text" name="weight" value="">
 
-        <lable for="input-content">Content:</lable>
+        <label for="input-content">Content:</label>
         <input jq-validate id="input-content" type="text" name="contents" value="">
 
-        <lable for="input-mission">Mission:</lable>
+        <label for="input-mission">Mission:</label>
         <input jq-validate id="input-mission" type="text" name="mission" value="">
 
-        <lable for="input-location">Location:</lable>
+        <label for="input-location">Location:</label>
         <input jq-validate id="input-location" type="text" name="location" value="">
 
+        <br />
         <button id="button-save"
                 type="button"
                 parent="form-cargo-save"
@@ -56,7 +57,7 @@
     </form>
 
     <h3>Current Cargo</h3>
-
+    <div id="div-table-container">
     <?php
 
             echo(library\html::table(array('data' => $cargo,
@@ -65,6 +66,7 @@
     'class'=>'table-record-list'), true ));
 
     ?>
+    </div>
 
 </div>
 

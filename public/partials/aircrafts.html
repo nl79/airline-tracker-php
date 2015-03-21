@@ -5,14 +5,14 @@
 
 <div id="div-aircrafts">
     <h1>Aircraft Management</h1>
-
+    <h3>Aircraft Information</h3>
     <form id="form-aircraft-save" method="POST" action="aircraft/save">
 
         <input id="input-entity-id" type="hidden" name="entity_id" value="" />
 
-        <h3>Aircraft Information</h3>
 
-        <lable for="input-tail-number">Tail Number:</lable>
+
+        <label for="input-tail-number">Tail Number:</label>
         <input jq-validate data-type="int"
                id="input-tail-number"
                name="tail_number" value=""
@@ -51,7 +51,7 @@
     </form>
 
     <h3>Current Fleet</h3>
-
+    <div id="div-table-container">
     <?php
 
             echo(library\html::table(array('data' => $aircrafts,
@@ -60,6 +60,8 @@
     'class'=>'table-record-list'), true ));
 
     ?>
+        </div>
+
 </div>
 
 

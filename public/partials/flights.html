@@ -29,14 +29,14 @@
 <div id="div-flights">
 
     <h1>Flight Management</h1>
-
+    <h3>Flight Information</h3>
     <form id="form-add-flight" method="post" action="/flight/save">
         <input id="input-entity-id" type="hidden" name="entity-id" value="" />
-        <h3>Flight Information</h3>
+
         <br />
 
 
-        <lable for="input-destination">Aircraft:
+        <label for="input-destination">Aircraft:
             <select jq-validate id="select-aircraft" name="aircraft-id">
                 <option value="">Select Aircraft</option>
                 <?php
@@ -48,15 +48,15 @@
 
                 ?>
             </select>
-        </lable>
+        </label>
 
-        <lable for="input-origin">Origin:
+        <label for="input-origin">Origin:
             <input jq-validate id="input-origin" type="text" class="flight-location-input" name="origin-id" value="" />
-        </lable>
+        </label>
 
-        <lable for="input-destination">Destination:
+        <label for="input-destination">Destination:
             <input jq-validate id="input-destination" type="text" class="flight-location-input" name="destination-id" value="" />
-        </lable>
+        </label>
 
         <br />
 
@@ -103,7 +103,7 @@
     <div id="div-recent-flights">
 
         <h3>Current Flights</h3>
-
+        <div id="div-table-container">
         <?php
 
             echo(library\html::table(array('data' => $flights,
@@ -112,6 +112,7 @@
                                             'class'=>'table-record-list'), true ));
 
         ?>
+    </div>
 
     </div>
 </div>

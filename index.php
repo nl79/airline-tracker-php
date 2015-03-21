@@ -15,9 +15,10 @@ date_default_timezone_set('America/New_York');
 
 
 // Site URL (base for all redirections):
-#define ('BASE_URL', 'https://web.njit.edu/~nl79/it302/it302register/public/');
-#define ('BASE_URL', 'http://osl81.njit.edu/~nl79/it302/it302register/public/');
-define ('BASE_URL', '/it302register/public/');
+#define ('BASE_URL', 'https://web.njit.edu/~nl79/it490/');
+#define ('BASE_URL', 'http://osl81.njit.edu/~nl79/it490/');
+define('BASE_URL', 'localhost/');
+
 
 
 /*
@@ -27,7 +28,7 @@ define ('BASE_URL', '/it302register/public/');
 require_once('library/loader.class.php'); 
 spl_autoload_register('library\\loader::load');
 
-require_once('mysqli_connect.php');
+require_once('../mysqli_connect.php');
 
 /*
  *create a router object.

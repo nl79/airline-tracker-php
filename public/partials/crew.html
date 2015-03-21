@@ -51,6 +51,12 @@
                 url="/crew/delete"
                 name="button-delete-crew">Delete</button>
 
+        <span>|</span>
+        <button id="button-reset"
+                type="button"
+                target="form-crew-save"
+                name="button-reset">Reset Form</button>
+
     </form>
 
     <h3>Current Crew</h3>
@@ -67,6 +73,10 @@
 </div>
 
 <script>
+
+    $("button#button-reset").on('click', function() {
+        reset.call(this);
+    });
 
     $("button#button-save").on('click', function() {
         save.call(this);

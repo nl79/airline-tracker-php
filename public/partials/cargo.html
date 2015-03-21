@@ -47,6 +47,12 @@
                 url="/cargo/delete"
                 name="button-delete-cargo">Delete</button>
 
+        <span>|</span>
+        <button id="button-reset"
+                type="button"
+                target="form-cargo-save"
+                name="button-reset">Reset Form</button>
+
     </form>
 
     <h3>Current Cargo</h3>
@@ -63,6 +69,9 @@
 </div>
 
 <script>
+    $("button#button-reset").on('click', function() {
+        reset.call(this);
+    });
 
     $("button#button-save").on('click', function() {
         save.call(this);

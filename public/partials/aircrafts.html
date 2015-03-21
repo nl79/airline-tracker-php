@@ -42,6 +42,12 @@
                 url="/aircraft/delete"
                 name="button-delete-aircraft">Delete</button>
 
+        <span>|</span>
+        <button id="button-reset"
+                type="button"
+                target="form-aircraft-save"
+                name="button-reset">Reset Form</button>
+
     </form>
 
     <h3>Current Fleet</h3>
@@ -58,6 +64,9 @@
 
 
 <script>
+    $("button#button-reset").on('click', function() {
+        reset.call(this);
+    });
 
     $("button#button-save").on('click', function() {
         save.call(this);

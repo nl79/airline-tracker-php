@@ -164,5 +164,15 @@ function save() {
             $.ajax(settings).done(callback);
         }
     }
+
+
+}
+
+function reset() {
+    var formId = $(this).attr('target');
+
+    //clear the form data.
+    $('form#' + formId).get(0).reset();
+    $('input#input-entity-id').val('');
 }
 

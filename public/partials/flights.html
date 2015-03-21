@@ -89,8 +89,14 @@
             <?php echo(drawMinuteOptions()); ?>
         </select>
 
-
+        <br />
         <button id="button-save" type="button" parent="form-add-flight" name="button-add-flight">Save</button>
+
+        <span>|</span>
+        <button id="button-reset"
+                type="button"
+                target="form-add-flight"
+                name="button-reset">Reset Form</button>
 
     </form>
 
@@ -111,7 +117,9 @@
 </div>
 
 <script>
-
+    $("button#button-reset").on('click', function() {
+        reset.call(this);
+    });
     /*
     departure and arrival date pickers.
      */

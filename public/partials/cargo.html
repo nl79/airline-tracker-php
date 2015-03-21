@@ -21,13 +21,15 @@
         </select>
 
         <label for="input-skid-id">Skid-ID:</label>
-        <input jq-validate id="input-skid-id" type="text" name="skid_id" value="">
+        <input jq-validate data-type="number" id="input-skid-id" type="text" name="skid_id" value="">
 
         <label for="input-weight">Weight:</label>
-        <input jq-validate id="input-weight" type="text" name="weight" value="">
+        <input jq-validate data-type="number" id="input-weight" type="text" name="weight" value="">
 
         <label for="input-content">Content:</label>
         <input jq-validate id="input-content" type="text" name="contents" value="">
+
+        <br />
 
         <label for="input-mission">Mission:</label>
         <input jq-validate id="input-mission" type="text" name="mission" value="">
@@ -57,7 +59,7 @@
     </form>
 
     <h3>Current Cargo</h3>
-    <div id="div-table-container">
+    <div class="div-table-container">
     <?php
 
             echo(library\html::table(array('data' => $cargo,

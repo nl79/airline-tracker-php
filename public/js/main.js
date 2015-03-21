@@ -87,7 +87,18 @@ function save() {
                 valid = false;
 
             } else {
-                $(this).removeClass('error');
+
+                /*
+                check the data-type attribute to see if the value should be numeric.
+                 */
+                var type = $(this).attr('data-type');
+                if(type.toLowerCase() == 'number' && isNaN($(this).val())){
+                    valid = false;
+                    $(this).addClass('error');
+                } else {
+                    $(this).removeClass('error');
+                }
+
             }
 
         });

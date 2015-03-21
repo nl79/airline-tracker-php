@@ -36,7 +36,7 @@
         <br />
 
 
-        <label for="input-destination">Aircraft:
+        <label for="select-aircraft">Aircraft:
             <select jq-validate id="select-aircraft" name="aircraft-id">
                 <option value="">Select Aircraft</option>
                 <?php
@@ -103,7 +103,7 @@
     <div id="div-recent-flights">
 
         <h3>Current Flights</h3>
-        <div id="div-table-container">
+        <div class="div-table-container">
         <?php
 
             echo(library\html::table(array('data' => $flights,

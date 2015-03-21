@@ -1,7 +1,19 @@
 <div id='div-home'>
-    <h3>Current Flight Data for: Newark Liberty International Airport -  - 3396</h3>
-    <div id='div-inbound-flights'>
-        <h3>Inbound Flights</h3>
+    <h3>Current Flight Data for: <span id="span-current">Newark Liberty International Airport -  - 3396</span></h3>
+
+    <form id="form-airport-search" method="POST" action="/">
+
+        <label for="input-airport-search">Search Airport:
+            <input jq-validate id="input-airport-search" type="text" class="airport-input" name="entity_id" value="" />
+        </label>
+
+        <button id="button-submit-form" name="submit" type='button' value="load">Load Data</button>
+
+    </form>
+
+    <h3>Inbound Flights</h3>
+    <div id='div-inbound' class="div-table-container">
+
         <?php
         
             $inbound = isset($data['inbound']) ? $data['inbound'] : array();
@@ -9,10 +21,11 @@
         ?> 
         
     </div>
-    
-    <div id='div-outbound-flights'>
+
+    <h3>Outbound Flights</h3>
+    <div id='div-outbound' class="div-table-container">
         
-        <h3>Outbound Flights</h3>
+
         <?php
         
             $outbound = isset($data['outbound']) ? $data['outbound'] : array();
@@ -20,9 +33,10 @@
         ?>
         
     </div>
-    
-    <div id='div-cargo'>
-        <h3>Cargo</h3>
+
+    <h3>Cargo</h3>
+    <div id='div-cargo' class="div-table-container">
+
         <?php
         
             $cargo = isset($data['cargo']) ? $data['cargo'] : array();
@@ -32,3 +46,77 @@
     </div>
 </div>
 
+<script>
+
+    $("input.airport-input").autocomplete({
+        source: function (request, response) {
+            $.get("?pg=airport&ac=find", {
+                query: request.term
+            }, function (data) {
+
+                response($.parseJSON(data));
+            });
+        },
+        minLength: 3
+    });
+
+    $("input.airport-input").on('click', function(e){
+
+
+        this.select();
+    })
+
+    $("button#button-submit-form").on('click',function(e){
+
+        var val = $('input#input-airport-search').val();
+
+        /*
+        set the val into the current label value.
+        */
+        $('span#span-current').val(val); 
+
+        /*
+        extract the entity_id
+         */
+        var id = val.split(':')[0];
+
+        if(!isNaN(id)) {
+            console.log(id);
+            //ajax settings object.
+            var settings = {
+                type: "POST",
+                url: '?pg=index&ac=loadData',
+                data: 'entity_id=' + id,
+                dataType: 'json'
+            };
+
+            var callback = function (data) {
+
+                if (data.statusCode == 200) {
+
+                    var html = data.html;
+
+                    for(key in html){
+                        if(html.hasOwnProperty(key)) {
+                            /*
+                            get he html cotainer for each key and set the
+                            data as its inner html.
+                             */
+                            var element = $('div#div-' + key.trim()).html(html[key]);
+                        }
+                    }
+
+                } else {
+                    //display error.
+                }
+            };
+
+            //console.log(settings);
+            //post the data to the server.
+            $.ajax(settings).done(callback);
+        }
+    });
+
+
+
+</script>

@@ -2,8 +2,15 @@ body {
     background-color: #F8F8F8;
 
 }
+h1 {
+    border-bottom: 2px solid red;
+}
+h3{
+    border-bottom: 1px solid orangered;
+}
 table {
     border-collapse: collapse;
+
 }
 
 table.table-record-list tr:hover {
@@ -61,12 +68,25 @@ form label {
 
 }
 
-div#div-table-container {
+div.div-table-container {
     padding: 20px;
     background-color: #F0F0F0;
     max-height: 600px;
     overflow-y: scroll;
+}
 
+form#form-airport-search {
+    width: 1000px;
+    margin: 0 auto;
+}
+form#form-airport-search input#input-airport-search {
+    font-size: 120%;
+    padding: 5px 10px;
+    width: 600px;
+}
+form#form-airport-search button, label {
+    font-size: 120%;
+    padding: 5px 10px;
 }
 .error {
     border: 1px solid red;

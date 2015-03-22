@@ -113,7 +113,7 @@ class cargo extends controller{
             /*
              * build the delete query.
              */
-            $sql = 'DELETE FROM cargo_table WHERE entity_id =' . $id;
+            $sql = 'DELETE FROM cargo_table WHERE entity_id =' . $dbc->escape_string($id);
 
             /*
              * execute the query and build a responce object.

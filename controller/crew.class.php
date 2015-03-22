@@ -124,7 +124,7 @@ class crew extends controller{
             /*
              * build the delete query.
              */
-            $sql = 'DELETE FROM crew_table WHERE entity_id =' . $id;
+            $sql = 'DELETE FROM crew_table WHERE entity_id =' . $dbc->escape_string($id);
 
             /*
              * execute the query and build a responce object.

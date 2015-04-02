@@ -9,6 +9,12 @@ class index extends controller{
          * default airport ID.
          */
 
+
+        //build a nested array to store the results and pass it to the view.
+        $data = array('inbound' => array(),
+            'outbound' => array(),
+            'cargo' => array());
+
         $entity_id = isset($_REQUEST['entity_id']) &&
             !empty($_REQUEST['entity_id']) &&
             is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : 3396;
@@ -31,34 +37,39 @@ class index extends controller{
                 WHERE t1.origin_id = ' . $dbc->escape_string($entity_id) .' AND t1.aircraft_id = t2.entity_id AND t1.origin_id = t3.entity_id';
                 
         $inbound = $dbc->query($sql);
-        
+
+        $ac_ids = array();
+
+
+        while($row = $outbound->fetch_assoc()){
+            $data['outbound'][] = $row;
+
+            if(!in_array($row['aircraft_id'], $ac_ids)){
+                $ac_ids[] = $row['aircraft_id'];
+            }
+        }
+
+        while($row = $inbound->fetch_assoc()){
+            $data['inbound'][] = $row;
+
+            if(!in_array($row['aircraft_id'], $ac_ids)){
+                $ac_ids[] = $row['aircraft_id'];
+            }
+        }
+
         //cargo.
-        $sql = 'SELECT * FROM cargo_table';
-	
-	$cargo = $dbc->query($sql);
-	
-	//build a nested array to store the results and pass it to the view.
-	$data = array('inbound' => array(),
-		      'outbound' => array(),
-		      'cargo' => array());
-	
-	 
-	while($row = $outbound->fetch_assoc()){
-	    $data['outbound'][] = $row; 
-	}
-	
-	while($row = $inbound->fetch_assoc()){
-	    $data['inbound'][] = $row;  
-	}
-	
-	while($row = $cargo->fetch_assoc()){
-	     $data['cargo'][] = $row;  
-	}
-	
-        /*
-         *load the view
-         */
-        $view = new \view\index('index', $data); 
+        $sql = 'SELECT * FROM cargo_table WHERE aircraft_id IN (' . implode(',', $ac_ids) . ')';
+
+	    $cargo = $dbc->query($sql);
+
+        while($row = $cargo->fetch_assoc()){
+             $data['cargo'][] = $row;
+        }
+
+            /*
+             *load the view
+             */
+        $view = new \view\index('index', $data);
 
     }
 
@@ -72,6 +83,13 @@ class index extends controller{
             is_numeric($_REQUEST['entity_id']) ? $_REQUEST['entity_id'] : null;
 
         if(is_numeric($entity_id)) {
+
+
+            //build a nested array to store the results and pass it to the view.
+            $data = array('inbound' => array(),
+                'outbound' => array(),
+                'cargo' => array());
+
             $output = array();
 
             global $dbc;
@@ -91,29 +109,62 @@ class index extends controller{
 
             $inbound = $dbc->query($sql);
 
-            //cargo.
-            $sql = 'SELECT * FROM cargo_table';
-
-            $cargo = $dbc->query($sql);
-
-            //build a nested array to store the results and pass it to the view.
-            $data = array('inbound' => array(),
-                'outbound' => array(),
-                'cargo' => array());
+            $ac_ids = array();
 
 
             while($row = $outbound->fetch_assoc()){
                 $data['outbound'][] = $row;
+
+                if(!in_array($row['aircraft_id'], $ac_ids)){
+                    $ac_ids[] = $row['aircraft_id'];
+                }
             }
 
             while($row = $inbound->fetch_assoc()){
                 $data['inbound'][] = $row;
+
+                if(!in_array($row['aircraft_id'], $ac_ids)){
+                    $ac_ids[] = $row['aircraft_id'];
+                }
             }
 
-            while($row = $cargo->fetch_assoc()){
-                $data['cargo'][] = $row;
+            if(!empty($ac_ids)) {
+                //cargo.
+                $sql = 'SELECT * FROM cargo_table WHERE aircraft_id IN (' . implode(',', $ac_ids) . ')';
+
+                $cargo = $dbc->query($sql);
+
+                while ($row = $cargo->fetch_assoc()) {
+                    $data['cargo'][] = $row;
+                }
+            } else {
+                $data['cargo'] = array();
             }
 
+            /*
+                        //cargo.
+                        $sql = 'SELECT * FROM cargo_table';
+
+                        $cargo = $dbc->query($sql);
+
+                        //build a nested array to store the results and pass it to the view.
+                        $data = array('inbound' => array(),
+                            'outbound' => array(),
+                            'cargo' => array());
+
+
+                        while($row = $outbound->fetch_assoc()){
+                            $data['outbound'][] = $row;
+                        }
+
+                        while($row = $inbound->fetch_assoc()){
+                            $data['inbound'][] = $row;
+                        }
+
+                        while($row = $cargo->fetch_assoc()){
+                            $data['cargo'][] = $row;
+                        }
+            */
             /*
              * build table html for each data record.
              */

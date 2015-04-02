@@ -1,5 +1,5 @@
 <div id='div-home'>
-    <h3>Current Flight Data for: <span id="span-current">Newark Liberty International Airport -  - 3396</span></h3>
+    <h3>Current Flight Data for: <span id="span-current">3396: Newark Liberty Intl - Newark, United States</span></h3>
 
     <form id="form-airport-search" method="POST" action="/">
 
@@ -73,7 +73,7 @@
         /*
         set the val into the current label value.
         */
-        $('span#span-current').val(val);
+        $('span#span-current').text(val);
 
         /*
         extract the entity_id

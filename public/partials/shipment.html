@@ -1,0 +1,32 @@
+<?php
+
+    $shipments = isset($data['shipment']) ? $data['shipment'] : array();
+
+    $orders = isset($data['orders']) ? $data['orders'] : array();
+
+    $flights = isset($data['flights']) ? $data['flights'] : array();
+
+        echo('<pre>');
+var_dump($orders);
+echo('</pre>');
+
+?>
+<div id="div-shipment">
+
+    <h1>Shipments</h1>
+    <h3>Shipped Orders</h3>
+
+
+
+    <h3>Unshipped Orders</h3>
+    <div class="div-table-container">
+        <?php
+
+            echo(library\html::table(array('data' => $orders,
+        'id_field' => 'ORDER_ID',
+        'id'=>'table-order-list',
+        'class'=>'table-record-list'), true ));
+
+        ?>
+    </div>
+</div>

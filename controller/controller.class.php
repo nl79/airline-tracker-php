@@ -30,4 +30,25 @@ abstract class controller {
             $this->defaultAction(); 
         }
     }
+
+    protected function getDBC2() {
+        // external database connection
+        $hostname	=	"sql.njit.edu";
+        $username	=	"rp373";
+        $password	=	"JoWkzAkw";
+        $project	=	"rp373";
+
+        // Make the connection:
+        $dbc = @mysqli_connect ($hostname, $username, $password, $project);
+
+        // If no connection could be made, trigger an error:
+        if (!$dbc) {
+            trigger_error ('Could not connect to MySQL: ' . mysqli_connect_error() );
+        } else { // Otherwise, set the encoding:
+            mysqli_set_charset($dbc, 'utf8');
+
+            //return the dbc object.
+            return $dbc;
+        }
+    }
 }

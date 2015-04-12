@@ -93,7 +93,7 @@ function save() {
                 check the data-type attribute to see if the value should be numeric.
                  */
                 var type = $(this).attr('data-type');
-                
+
                 if(type && type.toLowerCase() == 'number' && isNaN($(this).val())){
                     valid = false;
                     $(this).addClass('error');

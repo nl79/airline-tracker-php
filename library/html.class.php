@@ -38,8 +38,8 @@ class html {
         if($headings == true) {
             
             #extract the keys of the first data array element. 
-            $headings = array_keys($data[0]);
-            
+           // $headings = array_keys($data[0]);
+            $headings = array_keys($data[key($data)]);
         }
         
         #check the table orientation and build the heading.

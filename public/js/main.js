@@ -128,7 +128,6 @@ function save() {
             query += "&ac=" + parts[1];
             /***********************************************************/
 
-
             //ajax settings object.
             var settings = {
                 type:"POST",

@@ -59,12 +59,14 @@ class shipment  extends controller{
         //if there are shipments, limit the orders to those not yet shipped.
         if(!empty($order_ids)) {
 
-            $sql = 'SELECT * FROM CUSTOMER_ORDER AS t1
+            $sql = 'SELECT t1.*, t2.CUSTOMER_ZIP AS Zipcode, t2.CUSTOMER_PHONE AS Phone, t2.CUSTOMER_EMAIL as Email
+                FROM CUSTOMER_ORDER AS t1
                 JOIN _CUSTOMER AS t2 ON t1.CUSTOMER_ID = t2.CUSTOMER_ID
                 WHERE t1.ORDER_ID NOT IN (' . implode(',', $order_ids) . ')';
         } else {
 
-            $sql = 'SELECT * FROM CUSTOMER_ORDER AS t1
+            $sql = 'SELECT t1.*, t2.CUSTOMER_ZIP AS Zipcode, t2.CUSTOMER_PHONE AS Phone, t2.CUSTOMER_EMAIL as Email
+                FROM CUSTOMER_ORDER AS t1
                 JOIN _CUSTOMER AS t2 ON t1.CUSTOMER_ID = t2.CUSTOMER_ID';
         }
 
@@ -81,6 +83,61 @@ class shipment  extends controller{
          *load the view
          */
         $view = new \view\shipment('index', $data);
+
+    }
+
+
+    protected function saveAction() {
+
+        /* valid flag */
+        $valid = true;
+
+        /*required fields array*/
+        $required = array('order_id', 'flight_id');
+
+        foreach($required as $item) {
+            if(!isset($_REQUEST[$item]) || empty($_REQUEST[$item]) ||
+                !is_numeric($_REQUEST[$item])) {
+
+                $valid = false;
+            }
+        }
+
+        $output = array();
+
+        //get the dbc reference
+        global $dbc;
+
+        if($valid) {
+            $sql = "INSERT INTO shipment_table(flight_id, order_id)
+                    VALUES('" .$dbc->escape_string($_REQUEST['flight_id']) .
+                        "','" .$dbc->escape_string($_REQUEST['order_id']) . "')";
+
+            $res = $dbc->query($sql);
+
+            if($res) {
+
+                /*
+                 *array_merge is required to have entity_id as the first key in the array.
+                 * This will maintain consistency between output to the front-end.
+                 */
+                $data = array('entity_id' => $dbc->insert_id,
+                    'flight_id' => $_REQUEST['flight_id'],
+                    'order_id' => $_REQUEST['order_id']);
+
+                $output = array('statusCode' => 200,
+                    'op' => 'insert',
+                    'data' => $data);
+
+            } else {
+
+                # return an error object.
+                $output = array('statusCode' => 500,
+                    'op' => 'insert',
+                    'error' => $dbc->error);
+            }
+
+        }
 
     }
 

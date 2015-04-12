@@ -32,32 +32,62 @@
     <h3>Unshipped Orders</h3>
     <h4>Click on any displayed order to set up shipping</h4>
     <form id="form-save-shipment" method="post" action="shipment/save">
-        <label for="select-flights">Upcoming Flights</label>
 
-        <select id="select-flights">
-            <option value="">Select a Flight</option>
+        <label for="select-order-id">OrderID:
+            <select jq-validate id="select-order-id" name="order_id">
+                <option value="">Select Order</option>
+                <?php
 
-            <?php
-            print_r($flights);
-                if(!empty($flights)) {
+                    if(!empty($orders)) {
 
-                    $html = "";
+                        $html = "";
 
-                    foreach($flights as $row) {
+                        foreach($orders as $row) {
 
-                    echo("<option value='" . $row['entity_id'] . "'>");
-                    foreach($row as $key => $value) {
-                        echo($key . ": " . $value . ", ");
+                        echo("<option value='" . $row['ORDER_ID'] . "'>");
+                            foreach($row as $key => $value) {
+                                echo($key . ": " . $value . ", ");
+                            }
+
+                            echo("</option>");
+                        }
+                    } ?>
+            </select>
+
+        </label>
+
+
+        <label for="select-flights">Upcoming Flights
+            <select jq-validate id="select-flights" name="flight_id">
+                <option value="">Select a Flight</option>
+
+                <?php
+
+                    if(!empty($flights)) {
+
+                        $html = "";
+
+                        foreach($flights as $row) {
+
+                        echo("<option value='" . $row['entity_id'] . "'>");
+                        foreach($row as $key => $value) {
+                            echo($key . ": " . $value . ", ");
+                        }
+
+                        echo("</option>");
+
+                        }
+
                     }
 
-                    echo("</option>");
+                ?>
+            </select>
+        </label>
 
-                    }
-
-                }
-
-            ?>
-        </select>
+        <button id="button-save"
+                type="button"
+                parent="form-save-shipment"
+                name="button-save-shipment">Save Shipment</button>
     </form>
     <div class="div-table-container">
 
@@ -75,3 +105,21 @@
         ?>
     </div>
 </div>
+
+<script>
+
+    $("button#button-save").on('click', function() {
+
+        save.call(this);
+    });
+
+    $("table.table-record-list").on("click", "tr", function(e){
+
+        var entity_id = $(this).attr('id').split('-')[1];
+
+        //set the id as the value in the orders select.
+
+        $('select#select-order-id').val(entity_id);
+    });
+
+</script>

@@ -68,6 +68,7 @@ function remove() {
 }
 
 function save() {
+
     //select the elements to validate.
     var fields = $("[jq-validate]");
 
@@ -92,7 +93,8 @@ function save() {
                 check the data-type attribute to see if the value should be numeric.
                  */
                 var type = $(this).attr('data-type');
-                if(type.toLowerCase() == 'number' && isNaN($(this).val())){
+                
+                if(type && type.toLowerCase() == 'number' && isNaN($(this).val())){
                     valid = false;
                     $(this).addClass('error');
                 } else {
@@ -125,6 +127,7 @@ function save() {
             query += "&pg=" + parts[0];
             query += "&ac=" + parts[1];
             /***********************************************************/
+
 
             //ajax settings object.
             var settings = {

@@ -39,7 +39,6 @@ echo('</pre>');
 
 $router = new \library\Router();
 
-
 #build the page object.
 
 $page = 'controller\\' . $router->getNode();

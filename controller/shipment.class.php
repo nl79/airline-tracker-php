@@ -36,11 +36,13 @@ class shipment  extends controller{
 
 
         /*
-        * select all of the most recent flights.
+        * select all of the most recent flights departing after now.
         */
-        $sql = 'SELECT t1.*, t2.ac_type as "aircraft type" , t2.tail_number as "tail number"
+        $sql = 'SELECT t1.entity_id, t1.origin_id as Origin, t1.destination_id as Dest,
+                t1.departure_time as Departure, t1.arrivate_time as Arrival,
+                t2.ac_type as "Ac Type" , t2.tail_number as "Tail #"
                 FROM flight_table AS t1, aircraft_table AS t2
-                WHERE t1.aircraft_id = t2.entity_id
+                WHERE t1.aircraft_id = t2.entity_id and departure_time >= NOW()
                 ORDER BY t1.entity_id DESC';
 
         $flights = $dbc->query($sql);

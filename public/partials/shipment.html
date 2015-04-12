@@ -6,27 +6,72 @@
 
     $flights = isset($data['flights']) ? $data['flights'] : array();
 
-        echo('<pre>');
-var_dump($orders);
-echo('</pre>');
-
 ?>
 <div id="div-shipment">
 
     <h1>Shipments</h1>
     <h3>Shipped Orders</h3>
-
-
-
-    <h3>Unshipped Orders</h3>
     <div class="div-table-container">
         <?php
 
-            echo(library\html::table(array('data' => $orders,
-        'id_field' => 'ORDER_ID',
+        if(!empty($shipments)) {
+
+            echo(library\html::table(array('data' => $shipments,
+        'id_field' => 'entity_id',
         'id'=>'table-order-list',
         'class'=>'table-record-list'), true ));
 
+        } else {
+            echo("<h4>There are Currently No Shipments available to view <h4>");
+        }
+
+        ?>
+    </div>
+
+
+    <h3>Unshipped Orders</h3>
+    <h4>Click on any displayed order to set up shipping</h4>
+    <form id="form-save-shipment" method="post" action="shipment/save">
+        <label for="select-flights">Upcoming Flights</label>
+
+        <select id="select-flights">
+            <option value="">Select a Flight</option>
+
+            <?php
+            print_r($flights);
+                if(!empty($flights)) {
+
+                    $html = "";
+
+                    foreach($flights as $row) {
+
+                    echo("<option value='" . $row['entity_id'] . "'>");
+                    foreach($row as $key => $value) {
+                        echo($key . ": " . $value . ", ");
+                    }
+
+                    echo("</option>");
+
+                    }
+
+                }
+
+            ?>
+        </select>
+    </form>
+    <div class="div-table-container">
+
+        <?php
+
+        if(!empty($orders)) {
+
+                echo(library\html::table(array('data' => $orders,
+            'id_field' => 'ORDER_ID',
+            'id'=>'table-order-list',
+            'class'=>'table-record-list'), true ));
+        } else {
+            echo("<h4>There are Currently No Un-Shipped Orders</h4>");
+        }
         ?>
     </div>
 </div>

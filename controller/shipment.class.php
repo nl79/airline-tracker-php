@@ -162,4 +162,56 @@ class shipment  extends controller{
 
     }
 
+    protected function orderdataAction() {
+
+
+        $output = array();
+
+        $shipment_id = isset($_REQUEST['shipment_id']) &&
+            !empty($_REQUEST['shipment_id']) &&
+            is_numeric($_REQUEST['shipment_id']) ? $_REQUEST['shipment_id'] : null;
+
+        if(!is_null($shipment_id)) {
+
+
+            /*get the order id associated with the shipment */
+            global $dbc;
+
+            $sql = 'SELECT * FROM shipment_table WHERE entity_id=' .$dbc->escape_string($shipment_id);
+
+            $result = $dbc->query($sql);
+
+            if($result) {
+                $order_id = $result->fetch_assoc()['order_id'];
+
+                //get the secondary db connection
+                $dbc2 = $this->getDBC2();
+
+                $sql = 'SELECT t1.*, t2.CUSTOMER_FIRST as \'First Name\', t2.CUSTOMER_LAST as \'Last Name\' ,t2.CUSTOMER_ZIP AS Zipcode, t2.CUSTOMER_PHONE AS Phone, t2.CUSTOMER_EMAIL as Email
+                FROM CUSTOMER_ORDER AS t1
+                JOIN _CUSTOMER AS t2 ON t1.CUSTOMER_ID = t2.CUSTOMER_ID
+                WHERE t1.ORDER_ID=' . $dbc2->escape_string($order_id);
+
+                $result = $dbc2->query($sql);
+
+                $output['statusCode'] = 200;
+                $output['type'] = 'data';
+                $output['data'] = $result->fetch_assoc();
+
+            } else {
+                $output['statusCode'] = 404;
+                $output['type'] = 'error';
+                $output['error'] = "Invalid Shipment ID supplied";
+            }
+
+        } else {
+            $output['statusCode'] = 500;
+            $output['type'] = 'error';
+            $output['error'] = "Invalid Order ID supplied";
+        }
+
+        echo(json_encode($output));
+
+    }
+
 }

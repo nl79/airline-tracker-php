@@ -116,7 +116,7 @@
         var order_id = $('select#select-order-id').val();
 
         var callback = function() {
-            
+
             /*remove the tr in the order table with the order_id*/
             $('tr#ORDER_ID-' + order_id).remove();
         }
@@ -135,6 +135,48 @@
     });
 
     $("table#table-shipment-list").on("click", "tr", function(e){
+
+        //extract the id
+        var entity_id = $(this).attr('id').split('-')[1];
+
+
+        var query = 'pg=shipment&ac=orderdata&shipment_id=' + entity_id;
+
+        //ajax settings object.
+        var settings = {
+            type:"POST",
+            url: '',
+            data: query,
+            dataType: 'json'
+        };
+
+        console.log(settings);
+
+        var callback = function(data){
+
+            var msg;
+
+            if(data.statusCode && data.statusCode == 200) {
+
+                console.log(data.data);
+
+                if(data.data) {
+                    for(var key in data.data) {
+                        if(data.data.hasOwnProperty(key)) {
+                            msg += key + ': ' + data.data[key] + '\n';
+                        }
+                    }
+                }
+            } else if(data.error){
+                msg = data.error;
+            }
+
+            alert(msg);
+
+        }
+
+        //post the data to the server.
+        $.ajax(settings).done(callback);
 
     });
 

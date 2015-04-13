@@ -1,6 +1,6 @@
 <?php
 
-    $shipments = isset($data['shipment']) ? $data['shipment'] : array();
+    $shipments = isset($data['shipments']) ? $data['shipments'] : array();
 
     $orders = isset($data['orders']) ? $data['orders'] : array();
 
@@ -18,7 +18,7 @@
 
             echo(library\html::table(array('data' => $shipments,
         'id_field' => 'entity_id',
-        'id'=>'table-order-list',
+        'id'=>'table-shipment-list',
         'class'=>'table-record-list'), true ));
 
         } else {
@@ -30,7 +30,9 @@
 
 
     <h3>Unshipped Orders</h3>
-    <h4>Click on any displayed order to set up shipping</h4>
+    <h4>Select An Order from the list and a flight to initiate a shipment.</h4>
+    <h5>NOTE: Only flights departing after the current day are displayed. If No flights are displayed
+    ,please create a <a href="/?pg=flight">new flight</a></h5>
     <form id="form-save-shipment" method="post" action="shipment/save">
 
         <label for="select-order-id">OrderID:
@@ -110,16 +112,30 @@
 
     $("button#button-save").on('click', function() {
 
-        save.call(this);
+        /*get the value of the selected order*/
+        var order_id = $('select#select-order-id').val();
+
+        var callback = function() {
+            
+            /*remove the tr in the order table with the order_id*/
+            $('tr#ORDER_ID-' + order_id).remove();
+        }
+
+        save.call(this, callback);
     });
 
-    $("table.table-record-list").on("click", "tr", function(e){
+    $("table#table-order-list").on("click", "tr", function(e){
 
         var entity_id = $(this).attr('id').split('-')[1];
 
         //set the id as the value in the orders select.
 
         $('select#select-order-id').val(entity_id);
+
+    });
+
+    $("table#table-shipment-list").on("click", "tr", function(e){
+
     });
 
 </script>

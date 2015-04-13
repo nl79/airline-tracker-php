@@ -67,7 +67,7 @@ function remove() {
     }
 }
 
-function save() {
+function save(cbFunk) {
 
     //select the elements to validate.
     var fields = $("[jq-validate]");
@@ -164,6 +164,12 @@ function save() {
 
                         //clear the form data.
                         $('form#' + formId).get(0).reset();
+
+                        /* if the callback is supplied call it */
+
+                        console.log(cbFunk);
+
+                        if(cbFunk) { cbFunk(); }
                     }
 
                 }else {

@@ -28,12 +28,31 @@ class shipment  extends controller{
         //order ids that have been shipped.
         $order_ids = array();
 
-        while($row = $shipments->fetch_assoc()){
-            array_push($order_ids, $row['order_id']);
+        //if there are no returned results, build and empty array with the column headings
+        if($shipments->num_rows == 0) {
 
-            $data['shipments'][$row['entity_id']] = $row;
+            $data['shipments'] = array();
+
+            $fields = array();
+
+            while($heading = $shipments->fetch_field()) {
+
+                $fields[$heading->name] = '';
+
+            }
+
+            $data['shipments'][] = $fields;
+
+
+        } else {
+
+            while($row = $shipments->fetch_assoc()){
+                array_push($order_ids, $row['order_id']);
+
+                $data['shipments'][$row['entity_id']] = $row;
+            }
+
         }
-
 
         /*
         * select all of the most recent flights departing after now.
@@ -77,7 +96,6 @@ class shipment  extends controller{
 
             $data['orders'][$row['ORDER_ID']] = $row;
         }
-
 
         /*
          *load the view
@@ -138,6 +156,9 @@ class shipment  extends controller{
             }
 
         }
+
+        echo(json_encode($output));
+        exit;
 
     }
 

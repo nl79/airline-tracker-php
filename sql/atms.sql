@@ -85,6 +85,25 @@ CREATE TABLE cargo_table(
 ); 
 
 
+
+
+-- -----------INTEGRATION SECTION ---------------------------------
+
+-- order-flight table to assocciate order data from another system with the current flight records. 
+DROP TABLE IF EXISTS shipment_table; 
+CREATE TABLE shipment_table(
+	entity_id	int		not null auto_increment, 
+	flight_id	 int	not null, 
+    order_id	int(5)	not null, 
+    
+    PRIMARY KEY(entity_id), 
+    FOREIGN KEY(flight_id) REFERENCES flight_table(entity_id)
+
+); 
+
+
+-- ----------------- END INTEGRATION SECTION --------------------------
+
 -- Test data--
 -- aircraft table
 INSERT INTO aircraft_table(tail_number, ac_type,fuel)
